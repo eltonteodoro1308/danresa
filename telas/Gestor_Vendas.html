@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th {
+      background-color: lightblue;
+    }
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    input {
+      margin: 1em;
+      padding: 0.5em;
+      width: 14em;
+    }
+  </style>
+  <body>
+    <input type="button" value="Visualizar" />
+    <table>
+      <tr>
+        <th></th>
+        <th>Data</th>
+        <th>Cliente</th>
+        <th>Loja</th>
+        <th>Nome</th>
+        <th>Pedido</th>
+        <th>Item</th>
+      </tr>
+      <tr>
+        <td>🔴</td>
+        <td>05/04/2023</td>
+        <td>000001</td>
+        <td>01</td>
+        <td>Cliente 000001/01</td>
+        <td>000589</td>
+        <td>007</td>
+      </tr>
+      <tr style="background-color: cadetblue">
+        <td>🔴</td>
+        <td>07/04/2023</td>
+        <td>000002</td>
+        <td>01</td>
+        <td>Cliente 000002/01</td>
+        <td>000598</td>
+        <td>015</td>
+      </tr>
+      <tr>
+        <td>🟢</td>
+        <td>10/04/2023</td>
+        <td>000003</td>
+        <td>01</td>
+        <td>Cliente 000003/01</td>
+        <td>000611</td>
+        <td>003</td>
+      </tr>
+      <tr>
+        <td>🔴</td>
+        <td>13/04/2023</td>
+        <td>000004</td>
+        <td>01</td>
+        <td>Cliente 000004/01</td>
+        <td>000625</td>
+        <td>009</td>
+      </tr>
+      <tr>
+        <td>🟢</td>
+        <td>13/04/2023</td>
+        <td>000004</td>
+        <td>01</td>
+        <td>Cliente 000004/01</td>
+        <td>000789</td>
+        <td>019</td>
+      </tr>
+    </table>
+    <hr />
+    <hr />
+    <input type="button" value="Visualizar" />
+    <table>
+      <tr>
+        <th>Oportunidade</th>
+        <th>Cliente</th>
+        <th>Produto</th>
+      </tr>
+      <tr>
+        <td>000001 - Oportunidade AAA</td>
+        <td>000001 - Produto AAA</td>
+        <td>000001 - Cliente AAA</td>
+      </tr>
+    </table>
+  </body>
+</html>

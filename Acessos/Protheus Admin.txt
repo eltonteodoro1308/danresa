@@ -1,0 +1,42 @@
+
+ACESSO ADMIN PROTHEUS
+USer: a8
+Senha: 1371372
+
+ACESSO AO CRM NECTAR
+User: jjunior@danresa.com.br
+Senha: 7777
+
+ACESSO AO CRM NECTAR - HOMOLOGAÇÃO
+URL de acesso: https://app.nectarcrm.com.br/crm
+Login: tepoxox862@introace.com
+Senha: 102030a8
+
+-=-=-=-=-=-
+
+segue dados abaixo: TCLOUD:
+EMAIL:a8@a8.srv.br
+SENHA:Danres@222
+
+Produção 
+URL: sftp://danresasecurity132193.protheus.cloudtotvs.com.br:2323
+Porta: 2323
+Usuário: ftp_CJSTQC_production
+Senha: lVaNcRX8
+
+Desenvolvimento 
+URL: sftp://danresasecurity132194.protheus.cloudtotvs.com.br:2323
+Porta: 2323
+Usuário: ftp_CJSTQC_development
+Senha: https://getmypassword.cloudtotvs.com.br:/restore/ntPRsUZqF
+3jXGgbo9
+
+
+lisence sever
+http://danresasecurity132193.protheus.cloudtotvs.com.br:4070
+
+totvs.jeferson
+111111
+
+USER = Admin
+SENHA = Danres@222

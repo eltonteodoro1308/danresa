@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th {
+      background-color: lightblue;
+    }
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    input {
+      margin: 1em;
+      padding: 0.5em;
+      width: 14em;
+    }
+  </style>
+  <body>
+    <input type="button" value="Gerar Pedido" />
+    <input type="button" value="Compatibilizar Cliente" />
+    <input type="button" value="Compatibilizar Produto" />
+    <input type="button" value="Filtrar" />
+    <table>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>Oportunidade</th>
+        <th></th>
+        <th>Cliente</th>
+        <th></th>
+        <th>Produto</th>
+      </tr>
+      <tr>
+        <td>▢</td>
+        <td>🔴</td>
+        <td>000001 - Oportunidade AAA</td>
+        <td>🟢</td>
+        <td>000001 - Produto AAA</td>
+        <td>🔴</td>
+        <td>000001 - Cliente AAA</td>
+      </tr>
+      <tr>
+        <td>☑</td>
+        <td>🔴</td>
+        <td>000002 - Oportunidade CCC</td>
+        <td>🟢</td>
+        <td>000002 - Produto CCC</td>
+        <td>🟢</td>
+        <td>000002 - Cliente CCC</td>
+      </tr>
+      <tr>
+        <td>☑</td>
+        <td>🔴</td>
+        <td>000003 - Oportunidade DDD</td>
+        <td>🟢</td>
+        <td>000003 - Produto DDD</td>
+        <td>🟢</td>
+        <td>000003 - Cliente DDD</td>
+      </tr>
+      <tr>
+        <td>▢</td>
+        <td>🔴</td>
+        <td>000004 - Oportunidade EEE</td>
+        <td>🟢</td>
+        <td>000004 - Produto EEE</td>
+        <td>🔴</td>
+        <td>000004 - Cliente EEE</td>
+      </tr>
+      <tr>
+        <td>▢</td>
+        <td>🔴</td>
+        <td>000005 - Oportunidade FFF</td>
+        <td>🔴</td>
+        <td>000005 - Produto FFF</td>
+        <td>🟢</td>
+        <td>000005 - Cliente FFF</td>
+      </tr>
+      <tr>
+        <td>☑</td>
+        <td>🔴</td>
+        <td>000006 - Oportunidade GGG</td>
+        <td>🟢</td>
+        <td>000006 - Produto GGG</td>
+        <td>🟢</td>
+        <td>000007 - Cliente GGG</td>
+      </tr>
+      <tr style="background-color: cadetblue">
+        <td>▢</td>
+        <td>🟢</td>
+        <td>000010 - Oportunidade JJJ</td>
+        <td>🟢</td>
+        <td>000010 - Produto JJJ</td>
+        <td>🟢</td>
+        <td>000010 - Cliente JJJ</td>
+      </tr>
+      <tr>
+        <td>▢</td>
+        <td>🔴</td>
+        <td>000008 - Oportunidade HHH</td>
+        <td>🟢</td>
+        <td>000008 - Produto HHH</td>
+        <td>🔴</td>
+        <td>000008 - Cliente HHH</td>
+      </tr>
+      <tr>
+        <td>▢</td>
+        <td>🔴</td>
+        <td>000009 - Oportunidade III</td>
+        <td>🔴</td>
+        <td>000009 - Produto III</td>
+        <td>🟢</td>
+        <td>000009 - Cliente III</td>
+      </tr>
+    </table>
+    <hr />
+    <hr />
+    <input type="button" value="Visualizar" />
+    <table>
+      <tr>
+        <th></th>
+        <th>Data</th>
+        <th>Cliente</th>
+        <th>Loja</th>
+        <th>Nome</th>
+        <th>Pedido</th>
+        <th>Item</th>
+      </tr>
+      <tr>
+        <td>🔴</td>
+        <td>05/04/2023</td>
+        <td>000001</td>
+        <td>01</td>
+        <td>Cliente 000001/01</td>
+        <td>000589</td>
+        <td>007</td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+* Apenas incluir oportunidade, produto e contato que não existir, se exitir não executar nenhuma ação.
+
+- Se o produto ou contato já existirem na base fazer o vínculo na oportunidade preenchendo o código protheus de produto e cliente e também nas tabelas de produto e contato.
+
+- Como o produto no protheus tem diferentes correspondentes no nectar, a verificação do de para do produto precisa ser em um tabela , onde a chave é código nectar e a descrição o código protheus.
+
+- Na gravação do cadastro de produto o código do produto deve ser preenchido na oportunidade, produto e na tabala de depara
+
+- Na gravação do cadastro de contato/cliente o código do contato/cliente deve ser preenchido na oportunidade e contato
+
+- Ao compatibilizar um oportunidade para pedido selecionar todos os itens da oportunidade.
+
+- Ao selecionar uma oportunidade apenas, permitir optar por venda direta ou indireta
+
+- Ao selecionar mais de uma oportunidade mesmo que do mesmo cliente forçar venda indireta
+
+- Na venda direta usar o cliente da oportunidade e faturar 100% do preço do produto
+
+- Na venda indireta usar um cliente informado e permitir digitar o valor ou percentual a ser faturado contra o cliente do total da oportunidade e informar o produto a ser gerado o pedido
+
+- No item do Pedido informar um campo de produto da oportunidade informando o produto original da oportunidade.
+
+- Na tela de pedido de venda incluir campo de percentual e total a faturar do item somente habilitado no caso da tela ser chamada pelo cockpit
+
+- Incluir se houver mais de um produto na oportunidade.
+
+- Em uma tabela SX5 definir o de/para de códigos possíveis de um produto protheus para produtos nectar.
+
+- Reletório que traga dados do faturamento da oportunidade
+
+==========================================
+
+C6_XOPORTU -> Código da Oportunidade
+C6_XCLIOPO -> Cliente da Oportunidade
+C6_XLJOPOR -> Loja Cliente Oportunidade
+C6_XCLINEC -> Código Cliente Nectar
+
+
+
+????????????????????
+C6_XTOTFAT -> Define o total do item a faturar ( virtual )
+C6_XPRCFAT -> Define o percentual total a do item a faturar ( virtual )
+C6_XCLNTOT -> Guarda o total original do item para os cálculos (não é visível e é virtual )
