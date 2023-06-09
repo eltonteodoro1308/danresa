@@ -1,0 +1,573 @@
+MANIFESTO DE ATUALIZAÇÃO
+
+Data : 08/06/2023
+Hora : 22:39:43
+Arquivo de atualização diferencial baseado em projeto gerado pelo Configurador
+Projeto : 000001
+Descrição : INTEGRAÇÃO API NECTAR                             
+Versão : 0004
+Release de referência : 12.1.2210 
+Responsável pelo Projeto: 000000 - Administrador
+Geração do Pacote: 000000 - Administrador
+-----------------------------
+Componentes do arquivo de atualização :
+
+------------
+SIX
+
+Operação:Inclusão ou Alteração
+Tabela : ZZV
+Ordem : 1
+
+Operação:Inclusão ou Alteração
+Tabela : ZZV
+Ordem : 2
+
+Operação:Inclusão ou Alteração
+Tabela : ZZX
+Ordem : 1
+
+Operação:Inclusão ou Alteração
+Tabela : ZZX
+Ordem : 2
+
+Operação:Inclusão ou Alteração
+Tabela : ZZX
+Ordem : 3
+
+Operação:Inclusão ou Alteração
+Tabela : ZZY
+Ordem : 1
+
+Operação:Inclusão ou Alteração
+Tabela : ZZY
+Ordem : 2
+
+Operação:Inclusão ou Alteração
+Tabela : ZZZ
+Ordem : 1
+
+Operação:Inclusão ou Alteração
+Tabela : ZZZ
+Ordem : 2
+
+
+------------
+SX2
+
+Operação:Inclusão ou Alteração
+Tabela : MBR
+
+Operação:Inclusão ou Alteração
+Tabela : SA1
+
+Operação:Inclusão ou Alteração
+Tabela : SB1
+
+Operação:Inclusão ou Alteração
+Tabela : SL1
+
+Operação:Inclusão ou Alteração
+Tabela : ZZV
+
+Operação:Inclusão ou Alteração
+Tabela : ZZX
+
+Operação:Inclusão ou Alteração
+Tabela : ZZY
+
+Operação:Inclusão ou Alteração
+Tabela : ZZZ
+
+
+------------
+SX3
+
+Operação:Inclusão ou Alteração
+Campo : C6_XOPORTU
+
+Operação:Inclusão ou Alteração
+Campo : C6_XITOPOR
+
+Operação:Inclusão ou Alteração
+Campo : C6_XCOPORT
+
+Operação:Inclusão ou Alteração
+Campo : C6_LJOPORT
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_FILIAL
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_ATIVO 
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_CATEGO
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_CODIGO
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_COMISS
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_CONTAD
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_DSCMAX
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_DESCRI
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_EDPRDP
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_ID    
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_COMPRC
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_DSCPRC
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_MOEDA 
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_POSEST
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_PRDDEP
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_QTDEST
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_RECORR
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_SUBCAT
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_VLRBAS
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_VLREDT
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_FRACIO
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_ITCUST
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_FXPREC
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_VLBSCP
+
+Operação:Inclusão ou Alteração
+Campo : ZZV_JSON  
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_FILIAL
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_ATIVO 
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_AUTOR 
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_AUTATU
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_CATEGO
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_CNPJ  
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_CODIGO
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_CPF   
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_CONSTA
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_CONTAT
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_CNTPAI
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_DATATU
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_DTCRIA
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_EMAILS
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_EMPRES
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_EMPATU
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_ENDERE
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_FACEBO
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_ID    
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_INDPOR
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_LINKED
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_LISTA 
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_LISTAS
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_NOME  
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_OBSERV
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_ORIGEM
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_RAZSOC
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_RECANU
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_RESPON
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_SEGMEN
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_SIGILO
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_SITE  
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_SKYPE 
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_TELEFO
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_TWITER
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_COMPRO
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_OPORTU
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_TAREFA
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_RGPAIS
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_RGESTD
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_RGMUNC
+
+Operação:Inclusão ou Alteração
+Campo : ZZX_JSON  
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_FILIAL
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_OK    
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_CODIGO
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_CLICMP
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_CLIENT
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_NOME  
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_PRDCMP
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_PRODUT
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_AUTOR 
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_ITEM  
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_AUTATU
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_CONTAT
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_DTATUA
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_DTCRIA
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_DTLIM 
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_ETAPA 
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_ID    
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_PRORRO
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_JUSTIF
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_OBSERV
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_ORIGEM
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_PIPELI
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_FUNILV
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_PROBAB
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_QTDPRD
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_VLUNPD
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_VLTLPD
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_RESPON
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_STATUS
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_TEMPER
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_VLRAVS
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_VLRMES
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_VLRTOT
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_VLTDSC
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_COMPRO
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_TAREFA
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_BLQPRO
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_BLQCON
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_CORRES
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_EQCORR
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_MTDESC
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_VNDBAS
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_PEDGER
+
+Operação:Inclusão ou Alteração
+Campo : ZZY_JSON  
+
+Operação:Inclusão ou Alteração
+Campo : ZZZ_FILIAL
+
+Operação:Inclusão ou Alteração
+Campo : ZZZ_CDPROT
+
+Operação:Inclusão ou Alteração
+Campo : ZZZ_CDNECT
+
+
+------------
+SX6
+
+Operação:Inclusão ou Alteração
+Filial :   
+Parâmetro : MX_CPONECT
+
+Operação:Inclusão ou Alteração
+Filial :   
+Parâmetro : MX_TOKNECT
+
+Operação:Inclusão ou Alteração
+Filial :   
+Parâmetro : MX_URLNECT
+
+
+------------
+Helps (hlppack*.txt)
+
+Chave : C6_XOPORTU
+Chave : C6_XITOPOR
+Chave : C6_XCOPORT
+Chave : C6_LJOPORT
+Chave : ZZV_ATIVO 
+Chave : ZZV_CATEGO
+Chave : ZZV_CODIGO
+Chave : ZZV_COMISS
+Chave : ZZV_CONTAD
+Chave : ZZV_DSCMAX
+Chave : ZZV_DESCRI
+Chave : ZZV_EDPRDP
+Chave : ZZV_ID    
+Chave : ZZV_COMPRC
+Chave : ZZV_DSCPRC
+Chave : ZZV_MOEDA 
+Chave : ZZV_POSEST
+Chave : ZZV_PRDDEP
+Chave : ZZV_QTDEST
+Chave : ZZV_RECORR
+Chave : ZZV_SUBCAT
+Chave : ZZV_VLRBAS
+Chave : ZZV_VLREDT
+Chave : ZZV_FRACIO
+Chave : ZZV_ITCUST
+Chave : ZZV_FXPREC
+Chave : ZZV_VLBSCP
+Chave : ZZV_JSON  
+Chave : ZZX_ATIVO 
+Chave : ZZX_AUTOR 
+Chave : ZZX_AUTATU
+Chave : ZZX_CATEGO
+Chave : ZZX_CNPJ  
+Chave : ZZX_CODIGO
+Chave : ZZX_CPF   
+Chave : ZZX_CONSTA
+Chave : ZZX_CONTAT
+Chave : ZZX_CNTPAI
+Chave : ZZX_DATATU
+Chave : ZZX_DTCRIA
+Chave : ZZX_EMAILS
+Chave : ZZX_EMPRES
+Chave : ZZX_EMPATU
+Chave : ZZX_ENDERE
+Chave : ZZX_FACEBO
+Chave : ZZX_ID    
+Chave : ZZX_INDPOR
+Chave : ZZX_LINKED
+Chave : ZZX_LISTA 
+Chave : ZZX_LISTAS
+Chave : ZZX_NOME  
+Chave : ZZX_OBSERV
+Chave : ZZX_ORIGEM
+Chave : ZZX_RAZSOC
+Chave : ZZX_RECANU
+Chave : ZZX_RESPON
+Chave : ZZX_SEGMEN
+Chave : ZZX_SIGILO
+Chave : ZZX_SITE  
+Chave : ZZX_SKYPE 
+Chave : ZZX_TELEFO
+Chave : ZZX_TWITER
+Chave : ZZX_COMPRO
+Chave : ZZX_OPORTU
+Chave : ZZX_TAREFA
+Chave : ZZX_RGPAIS
+Chave : ZZX_RGESTD
+Chave : ZZX_RGMUNC
+Chave : ZZX_JSON  
+Chave : ZZY_OK    
+Chave : ZZY_CODIGO
+Chave : ZZY_CLICMP
+Chave : ZZY_CLIENT
+Chave : ZZY_NOME  
+Chave : ZZY_PRDCMP
+Chave : ZZY_PRODUT
+Chave : ZZY_AUTOR 
+Chave : ZZY_ITEM  
+Chave : ZZY_AUTATU
+Chave : ZZY_CONTAT
+Chave : ZZY_DTATUA
+Chave : ZZY_DTCRIA
+Chave : ZZY_DTLIM 
+Chave : ZZY_ETAPA 
+Chave : ZZY_ID    
+Chave : ZZY_PRORRO
+Chave : ZZY_JUSTIF
+Chave : ZZY_OBSERV
+Chave : ZZY_ORIGEM
+Chave : ZZY_PIPELI
+Chave : ZZY_FUNILV
+Chave : ZZY_PROBAB
+Chave : ZZY_QTDPRD
+Chave : ZZY_VLUNPD
+Chave : ZZY_VLTLPD
+Chave : ZZY_RESPON
+Chave : ZZY_STATUS
+Chave : ZZY_TEMPER
+Chave : ZZY_VLRAVS
+Chave : ZZY_VLRMES
+Chave : ZZY_VLRTOT
+Chave : ZZY_VLTDSC
+Chave : ZZY_COMPRO
+Chave : ZZY_TAREFA
+Chave : ZZY_BLQPRO
+Chave : ZZY_BLQCON
+Chave : ZZY_CORRES
+Chave : ZZY_EQCORR
+Chave : ZZY_MTDESC
+Chave : ZZY_VNDBAS
+Chave : ZZY_PEDGER
+Chave : ZZY_JSON  
+Chave : ZZZ_CDPROT
+Chave : ZZZ_CDNECT
