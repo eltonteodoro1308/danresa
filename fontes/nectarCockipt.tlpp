@@ -4,26 +4,58 @@
 
 user function nectarCockipt()
 
-	// incPedido()
-    incCliente()
+	Local aCoors      := FWGetDialogSize( oMainWnd )
+	Local oDlgPrinc   := nil
+	Local oPanelUp    := nil
+	Local oPanelDown  := nil
+	Local oBrowseUp   := nil
+	Local oBrowseDown := nil
+	Local oFWLayer    := FWLayer():New()
 
-return
+	Define MsDialog oDlgPrinc Title 'Cockipt' From aCoors[1], aCoors[2] To aCoors[3], aCoors[4] Pixel
 
-static function incCliente()
+	oFWLayer:Init( oDlgPrinc, .F., .T. )
 
-    dbSelectArea('SA1')
-	FWExecView("Incluir","CRMA980",MODEL_OPERATION_INSERT,/*oDlg*/,/*bCloseOnOk*/,/*bOk*/,/*nPercReducao*/)	
+	oFWLayer:AddLine( 'UP', 50, .F. )
+	oFWLayer:AddCollumn( 'ALL', 100, .T., 'UP' )
+	oPanelUp := oFWLayer:GetColPanel( 'ALL', 'UP' )
 
-return
+	oFWLayer:AddLine( 'DOWN', 50, .F. )
+	oFWLayer:AddCollumn( 'ALL' , 100, .T., 'DOWN' )
+	oPanelDown := oFWLayer:GetColPanel( 'ALL', 'DOWN' )
 
-static function incPedido()
+	oBrowseUp := FWMarkBrowse():New()
+	oBrowseUp:SetOwner( oPanelUp )
+	oBrowseUp:SetDescription( "Oportunidades" )
+	oBrowseUp:SetAlias( 'ZZY' )
+	oBrowseUp:DisableReport()
+	
+	oBrowseUp:SetFieldMark( 'ZZY_OK' )
 
-	Local nOpc := 3
+	oBrowseUp:AddLegend( 'ZZY->ZZY_PEDGER' , 'GREEN', 'Pedido Gerado'     )
+	oBrowseUp:AddLegend( '!ZZY->ZZY_PEDGER',   'RED', 'Pedido Não Gerado' )
+	
+	oBrowseUp:DisableDetails()
+	oBrowseUp:ForceQuitButton()
+	oBrowseUp:SetMenuDef( 'mnuCockpitZZY' ) // Define de onde virao os botoes deste browse
+	oBrowseUp:SetProfileID( '1' ) // identificador (ID) para o Browse
+	oBrowseUp:Activate()
 
-	Private cCadastro  := "Atualização de Pedidos de Venda"
-	Private INCLUI     := .T.
-	Private aRotina    := FWLoadMenuDef( 'MATA410' )
+	oBrowseDown := FWmBrowse():New()
+	oBrowseDown:SetOwner( oPanelDown )
+	oBrowseDown:SetDescription( 'Itens Pedido de Venda' )
+	oBrowseDown:SetAlias( 'SC6' )
+	oBrowseDown:DisableReport()
 
-	A410Inclui(/*cAlias*/,/*nReg*/, nOpc /*,lOrcamento,nStack,aRegSCK,lContrat,nTpContr,cCodCli,cLoja,cMedPMS*/)
+	oBrowseDown:AddLegend( 'SC6->( C6_QTDENT == 0 )'         , 'GREEN' , 'Não Faturado'          )
+	oBrowseDown:AddLegend( 'SC6->( C6_QTDVEN > C6_QTDENT )'  , 'YELLOW', 'Parcialmente Faturado' )
+	oBrowseDown:AddLegend( 'SC6->( C6_QTDVEN == C6_QTDENT )' , 'RED'   , 'Totalmente Faturado'   )
+	
+	oBrowseDown:DisableDetails()
+	oBrowseDown:SetMenuDef( '' ) // Referencia vazia para que nao exiba nenhum botão
+	oBrowseDown:SetProfileID( '2' )
+	oBrowseDown:Activate()
+
+	ACTIVATE MSDIALOG oDlgPrinc CENTERED
 
 return

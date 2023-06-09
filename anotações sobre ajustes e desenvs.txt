@@ -1,10 +1,12 @@
 * Apenas incluir oportunidade, produto e contato que não existir, se exitir não executar nenhuma ação.
 
-- Se o produto ou contato já existirem na base fazer o vínculo na oportunidade preenchendo o código protheus de produto e cliente e também nas tabelas de produto e contato.
+* Se o produto já existir na base marcá-lo como compatibilizado a oportunidade.
 
-- Como o produto no protheus tem diferentes correspondentes no nectar, a verificação do de para do produto precisa ser em um tabela , onde a chave é código nectar e a descrição o código protheus.
+* Se o contato já existir na base marcá-lo como compatibilizado a oportunidade.
 
-- Na gravação do cadastro de produto o código do produto deve ser preenchido na oportunidade, produto e na tabala de depara
+* Como o produto no protheus tem diferentes correspondentes no nectar, a verificação do de/para do produto precisa ser em um tabela que faz a amarração do código protheus x código nectar.
+
+- Na gravação do cadastro de produto a oportunidade deve ter a flag de produto compatibilizado marcada.
 
 - Na gravação do cadastro de contato/cliente o código do contato/cliente deve ser preenchido na oportunidade e contato
 

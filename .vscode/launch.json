@@ -30,6 +30,10 @@
 		},
 		{
 			"label": "SIGAFAT"
+		},
+		{
+			"args": [],
+			"label": "U_testenectarApiIntegrator"
 		}
 	],
 	"lastProgramExecuted": "SIGAFAT"

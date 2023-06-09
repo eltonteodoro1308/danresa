@@ -49,6 +49,7 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 
 	local cId := ''
 	local nX  := 1
+	local nY  := 1
 
 	if cHttpCode == '200'
 
@@ -64,52 +65,61 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 
 			if ! ZZY->( msSeek( xFilial( 'ZZY' ) + cId ) )
 
-				recLock( 'ZZY', .T. )
+				for nY := 1 to len( aOportunidades[ nX ]['produtos'] )
 
-				ZZY->ZZY_FILIAL := xFilial( 'ZZY' )
-				ZZY->ZZY_AUTOR  := aOportunidades[ nX ]['autor']['nome']
-				ZZY->ZZY_AUTATU := aOportunidades[ nX ]['autorAtualizacao']['nome']
-				ZZY->ZZY_CLIENT := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
-				ZZY->ZZY_CONTAT := ''
-				ZZY->ZZY_CODIGO := aOportunidades[ nX ]['codigo']
-				ZZY->ZZY_DTATUA := FwDateTimeToLocal( aOportunidades[ nX ]['dataAtualizacao'] + '-03:00', 0 )[ 1 ]
-				ZZY->ZZY_DTCRIA := FwDateTimeToLocal( aOportunidades[ nX ]['dataCriacao'] + '-03:00', 0 )[ 1 ]
-				ZZY->ZZY_DTLIM  := FwDateTimeToLocal( aOportunidades[ nX ]['dataLimite'] + '-03:00', 0 )[ 1 ]
-				ZZY->ZZY_ETAPA  := cValTochar( aOportunidades[ nX ]['etapa'] )
-				ZZY->ZZY_ID    	:= cValToChar( aOportunidades[ nX ]['id'] )
-				ZZY->ZZY_PRORRO	:= .F.
-				ZZY->ZZY_JUSTIF := ''
-				ZZY->ZZY_NOME   := aOportunidades[ nX ]['cliente']['nome']
-				ZZY->ZZY_OBSERV	:= ''
-				ZZY->ZZY_ORIGEM := ''
-				ZZY->ZZY_PIPELI	:= aOportunidades[ nX ]['pipeline']
-				ZZY->ZZY_FUNILV := aOportunidades[ nX ]['funilVenda']['nome']
-				ZZY->ZZY_PROBAB	:= cValTochar( aOportunidades[ nX ]['probabilidade'] )
-				ZZY->ZZY_PRODUT := aOportunidades[ nX ]['produtos'][nY]['codigo']
-				ZZY->ZZY_RESPON := aOportunidades[ nX ]['responsavel']['nome']
-				ZZY->ZZY_STATUS := cValToChar( aOportunidades[ nX ]['status'] )
-				ZZY->ZZY_TEMPER := aOportunidades[ nX ]['temperatura']
-				ZZY->ZZY_VLRAVS := aOportunidades[ nX ]['valorAvulso']
-				ZZY->ZZY_VLRMES := aOportunidades[ nX ]['valorMensal']
-				ZZY->ZZY_VLRTOT := aOportunidades[ nX ]['valorTotal']
-				ZZY->ZZY_VLTDSC := aOportunidades[ nX ]['valorTotalDescontos']
-				ZZY->ZZY_COMPRO := aOportunidades[ nX ]['compromissos']
-				ZZY->ZZY_TAREFA := aOportunidades[ nX ]['tarefas']
-				ZZY->ZZY_BLQPRO := .F.
-				ZZY->ZZY_BLQCON := .F.
-				ZZY->ZZY_CORRES := ''
-				ZZY->ZZY_EQCORR := ''
-				ZZY->ZZY_MTDESC := ''
-				ZZY->ZZY_VNDBAS := .F.
-				ZZY->ZZY_PEDGER := .F.
-				ZZY->ZZY_CLICMP := aOportunidades[ nX ]['cliente']['cnpj']
-				ZZY->ZZY_PRDCMP := .f.
-				// ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
+					recLock( 'ZZY', .T. )
 
-				ZZY->( msUnlock() )
+					ZZY->ZZY_FILIAL := xFilial( 'ZZY' )
+					ZZY->ZZY_AUTOR  := aOportunidades[ nX ]['autor']['nome']
+					ZZY->ZZY_AUTATU := aOportunidades[ nX ]['autorAtualizacao']['nome']
+					ZZY->ZZY_CLIENT := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
+					ZZY->ZZY_CONTAT := ''
+					ZZY->ZZY_CODIGO := aOportunidades[ nX ]['codigo']
+					ZZY->ZZY_DTATUA := FwDateTimeToLocal( aOportunidades[ nX ]['dataAtualizacao'] + '-03:00', 0 )[ 1 ]
+					ZZY->ZZY_DTCRIA := FwDateTimeToLocal( aOportunidades[ nX ]['dataCriacao'] + '-03:00', 0 )[ 1 ]
+					ZZY->ZZY_DTLIM  := FwDateTimeToLocal( aOportunidades[ nX ]['dataLimite'] + '-03:00', 0 )[ 1 ]
+					ZZY->ZZY_ETAPA  := cValTochar( aOportunidades[ nX ]['etapa'] )
+					ZZY->ZZY_ID    	:= cValToChar( aOportunidades[ nX ]['id'] )
+					ZZY->ZZY_PRORRO	:= .F.
+					ZZY->ZZY_JUSTIF := ''
+					ZZY->ZZY_NOME   := aOportunidades[ nX ]['cliente']['nome']
+					ZZY->ZZY_OBSERV	:= ''
+					ZZY->ZZY_ORIGEM := ''
+					ZZY->ZZY_PIPELI	:= aOportunidades[ nX ]['pipeline']
+					ZZY->ZZY_FUNILV := aOportunidades[ nX ]['funilVenda']['nome']
+					ZZY->ZZY_PROBAB	:= cValTochar( aOportunidades[ nX ]['probabilidade'] )
+					ZZY->ZZY_ITEM   := strZero( nY, tamSx3('ZZY_ITEM')[1] )
+					ZZY->ZZY_PRODUT := aOportunidades[ nX ]['produtos'][nY]['codigo']
+					ZZY->ZZY_QTDPRD := aOportunidades[ nX ]['produtos'][nY]['quantidade']
+					ZZY->ZZY_VLUNPD := aOportunidades[ nX ]['produtos'][nY]['valorUnitario']
+					ZZY->ZZY_VLTLPD := aOportunidades[ nX ]['produtos'][nY]['valorTotal']
+					ZZY->ZZY_RESPON := aOportunidades[ nX ]['responsavel']['nome']
+					ZZY->ZZY_STATUS := cValToChar( aOportunidades[ nX ]['status'] )
+					ZZY->ZZY_TEMPER := aOportunidades[ nX ]['temperatura']
+					ZZY->ZZY_VLRAVS := aOportunidades[ nX ]['valorAvulso']
+					ZZY->ZZY_VLRMES := aOportunidades[ nX ]['valorMensal']
+					ZZY->ZZY_VLRTOT := aOportunidades[ nX ]['valorTotal']
+					ZZY->ZZY_VLTDSC := aOportunidades[ nX ]['valorTotalDescontos']
+					ZZY->ZZY_COMPRO := aOportunidades[ nX ]['compromissos']
+					ZZY->ZZY_TAREFA := aOportunidades[ nX ]['tarefas']
+					ZZY->ZZY_BLQPRO := .F.
+					ZZY->ZZY_BLQCON := .F.
+					ZZY->ZZY_CORRES := ''
+					ZZY->ZZY_EQCORR := ''
+					ZZY->ZZY_MTDESC := ''
+					ZZY->ZZY_VNDBAS := .F.
+					ZZY->ZZY_PEDGER := .F.
+					ZZY->ZZY_CLICMP := ! empty( posicione( 'SA1', 3, xFilial( 'SA1' ) + aOportunidades[ nX ]['cliente']['cnpj'], 'A1_CGC' ) )
+					ZZY->ZZY_PRDCMP := ! empty( posicione( 'ZZZ', 2, xFilial( 'ZZZ' ) + aOportunidades[ nX ]['produtos'][nY]['codigo'], 'ZZZ_CDPROT' ) )
+					// ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
+
+					ZZY->( msUnlock() )
+
+					buscaProduto( cValToChar( aOportunidades[ nX ]['produtos'][nY]['produto']['id'] ) )
+
+				next nY
 
 				buscaContato( cValToChar( aOportunidades[ nX ]['cliente']['id'] ) )
-				buscaProduto( cValToChar( aOportunidades[ nX ]['produtos'][1]['produto']['id'] ) )
 				integraOportunidade( cValToChar( aOportunidades[ nX ]['id'] ) )
 
 			end if
@@ -129,9 +139,8 @@ static function buscaContato( cId )
 	local cUrlContato := ''
 
 	cUrlContato := cUrl
-	cUrlContato += 'contatos/'
+	cUrlContato += 'contatos/'+ cId
 	cUrlContato += '?api_token=' + cToken
-	cUrlContato += '&id=' + cId
 
 	fetch( cUrlContato, 'GET', /*cGETParms*/, /*cPOSTParms*/, /*nTimeOut*/, /*aHeadStr*/,;
 		{ | cHeaderRet, uResponse, uJsonXml, cHttpCode, cContentType | ;
@@ -147,7 +156,6 @@ static function gravaContato( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 	if cHttpCode == '200'
 
 		jContato:fromJson( DecodeUtf8( uResponse ) )
-		jContato := jContato[1]
 
 		cId := cValToChar( jContato['id'] )
 
@@ -219,9 +227,8 @@ static function buscaProduto( cId )
 	local cUrlProduto := ''
 
 	cUrlProduto := cUrl
-	cUrlProduto += 'produto/'
+	cUrlProduto += 'produto/'+ cId
 	cUrlProduto += '?api_token=' + cToken
-	cUrlProduto += '&id=' + cId
 
 	fetch( cUrlProduto, 'GET', /*cGETParms*/, /*cPOSTParms*/, /*nTimeOut*/, /*aHeadStr*/,;
 		{ | cHeaderRet, uResponse, uJsonXml, cHttpCode, cContentType | ;
@@ -237,7 +244,6 @@ static function gravaProduto( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 	if cHttpCode == '200'
 
 		jProduto:fromJson( DecodeUtf8( uResponse ) )
-		jProduto := jProduto[1]
 
 		cId := cValToChar( jProduto['id'] )
 
