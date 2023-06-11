@@ -1,4 +1,4 @@
-00164031SIGAFAT                                           05<ApMenu>
+00165275SIGAFAT                                           05<ApMenu>
 	<DocumentProperties>
 		<Module>SIGAFAT</Module>
 		<Version>10.1</Version>
@@ -3501,26 +3501,6 @@
 				</KeyWord>
 			</MenuItem>
 		</Menu>
-		<Menu Status="Enable">
-			<Title lang="pt">Nectar Crm Integ</Title>
-			<Title lang="es">Nectar Crm Integ</Title>
-			<Title lang="en">Nectar Crm Integ</Title>
-			<MenuItem Status="Enable">
-				<Title lang="pt">Cockpit</Title>
-				<Title lang="es">Cockpit</Title>
-				<Title lang="en">Cockpit</Title>
-				<Function>NECTARCOCKIPT</Function>
-				<Type>03</Type>
-				<Access>xxxxxxxxxx</Access>
-				<Module>97</Module>
-				<Owner>0</Owner>
-				<KeyWord>
-					<KeyWord lang="pt"></KeyWord>
-					<KeyWord lang="es"></KeyWord>
-					<KeyWord lang="en"></KeyWord>
-				</KeyWord>
-			</MenuItem>
-		</Menu>
 	</Menu>
 	<Menu Status="Enable">
 		<Title lang="pt">&Relatorios</Title>
@@ -4967,6 +4947,41 @@
 		<Title lang="es">&Miscelanea</Title>
 		<Title lang="en">&Miscellaneous</Title>
 		<ItemId>A050000004</ItemId>
+		<Menu Status="Enable">
+			<Title lang="pt">* Integração Nectar</Title>
+			<Title lang="es">* Integração Nectar</Title>
+			<Title lang="en">* Integração Nectar</Title>
+			<MenuItem Status="Enable">
+				<Title lang="pt">* Cockpit</Title>
+				<Title lang="es">* Cockpit</Title>
+				<Title lang="en">* Cockpit</Title>
+				<Function>NECTARCOCKIPT</Function>
+				<Type>03</Type>
+				<Access>xxxxxxxxxx</Access>
+				<Module>97</Module>
+				<Owner>0</Owner>
+				<KeyWord>
+					<KeyWord lang="pt"></KeyWord>
+					<KeyWord lang="es"></KeyWord>
+					<KeyWord lang="en"></KeyWord>
+				</KeyWord>
+			</MenuItem>
+			<MenuItem Status="Enable">
+				<Title lang="pt">* Produto Nectar X Protheus</Title>
+				<Title lang="es">* Produto Nectar X Protheus</Title>
+				<Title lang="en">* Produto Nectar X Protheus</Title>
+				<Function>AXCADZZZ</Function>
+				<Type>03</Type>
+				<Access>xxxxxxxxxx</Access>
+				<Module>97</Module>
+				<Owner>0</Owner>
+				<KeyWord>
+					<KeyWord lang="pt"></KeyWord>
+					<KeyWord lang="es"></KeyWord>
+					<KeyWord lang="en"></KeyWord>
+				</KeyWord>
+			</MenuItem>
+		</Menu>
 		<MenuItem Status="Enable">
 			<Title lang="pt">Planilha Excel</Title>
 			<Title lang="es">Planilla Excel</Title>
@@ -5201,6 +5216,29 @@
 				<Module>05</Module>
 				<Owner>9</Owner>
 				<ItemId>0000016885</ItemId>
+				<KeyWord>
+					<KeyWord lang="pt"></KeyWord>
+					<KeyWord lang="es"></KeyWord>
+					<KeyWord lang="en"></KeyWord>
+				</KeyWord>
+			</MenuItem>
+		</Menu>
+		<Menu Status="Enable">
+			<Title lang="pt">Rotinas Tss</Title>
+			<Title lang="es">Rutinas Tss</Title>
+			<Title lang="en">Tss Routines</Title>
+			<ItemId>0000018929</ItemId>
+			<MenuItem Status="Enable">
+				<Title lang="pt">Conf. Gerais Tss</Title>
+				<Title lang="es">Configuración General de Tss</Title>
+				<Title lang="en">Tss General Settings</Title>
+				<Function>SPEDCFGTSS</Function>
+				<Type>01</Type>
+				<Tables>FX7</Tables>
+				<Access>xxxxxxxxxx</Access>
+				<Module>05</Module>
+				<Owner>0</Owner>
+				<ItemId>0000018932</ItemId>
 				<KeyWord>
 					<KeyWord lang="pt"></KeyWord>
 					<KeyWord lang="es"></KeyWord>

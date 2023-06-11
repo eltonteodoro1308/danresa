@@ -110,7 +110,8 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 					ZZY->ZZY_VNDBAS := .F.
 					ZZY->ZZY_PEDGER := .F.
 					ZZY->ZZY_CLICMP := ! empty( posicione( 'SA1', 3, xFilial( 'SA1' ) + aOportunidades[ nX ]['cliente']['cnpj'], 'A1_CGC' ) )
-					ZZY->ZZY_PRDCMP := ! empty( posicione( 'ZZZ', 2, xFilial( 'ZZZ' ) + aOportunidades[ nX ]['produtos'][nY]['codigo'], 'ZZZ_CDPROT' ) )
+					ZZY->ZZY_PRDCMP := ! empty( posicione( 'ZZZ', 2, xFilial( 'ZZZ' ) + aOportunidades[ nX ]['produtos'][nY]['codigo'], 'ZZZ_CDNECT' ) )
+					ZZY->ZZY_IDCLI  := aOportunidades[ nX ]['cliente']['id']
 					// ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
 
 					ZZY->( msUnlock() )

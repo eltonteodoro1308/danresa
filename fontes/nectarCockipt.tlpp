@@ -4,13 +4,14 @@
 
 user function nectarCockipt()
 
-	Local aCoors      := FWGetDialogSize( oMainWnd )
-	Local oDlgPrinc   := nil
-	Local oPanelUp    := nil
-	Local oPanelDown  := nil
-	Local oBrowseUp   := nil
-	Local oBrowseDown := nil
-	Local oFWLayer    := FWLayer():New()
+	Local aCoors       := FWGetDialogSize( oMainWnd )
+	Local oDlgPrinc    := nil
+	Local oPanelUp     := nil
+	Local oPanelDown   := nil
+	Local oBrowseUp    := nil
+	Local oBrowseDown  := nil
+	Local oFWLayer     := FWLayer():New()
+	Local oBrwRelation := FWBrwRelation():New()
 
 	Define MsDialog oDlgPrinc Title 'Cockipt' From aCoors[1], aCoors[2] To aCoors[3], aCoors[4] Pixel
 
@@ -29,12 +30,12 @@ user function nectarCockipt()
 	oBrowseUp:SetDescription( "Oportunidades" )
 	oBrowseUp:SetAlias( 'ZZY' )
 	oBrowseUp:DisableReport()
-	
+
 	oBrowseUp:SetFieldMark( 'ZZY_OK' )
 
 	oBrowseUp:AddLegend( 'ZZY->ZZY_PEDGER' , 'GREEN', 'Pedido Gerado'     )
 	oBrowseUp:AddLegend( '!ZZY->ZZY_PEDGER',   'RED', 'Pedido Não Gerado' )
-	
+
 	oBrowseUp:DisableDetails()
 	oBrowseUp:ForceQuitButton()
 	oBrowseUp:SetMenuDef( 'mnuCockpitZZY' ) // Define de onde virao os botoes deste browse
@@ -50,11 +51,18 @@ user function nectarCockipt()
 	oBrowseDown:AddLegend( 'SC6->( C6_QTDENT == 0 )'         , 'GREEN' , 'Não Faturado'          )
 	oBrowseDown:AddLegend( 'SC6->( C6_QTDVEN > C6_QTDENT )'  , 'YELLOW', 'Parcialmente Faturado' )
 	oBrowseDown:AddLegend( 'SC6->( C6_QTDVEN == C6_QTDENT )' , 'RED'   , 'Totalmente Faturado'   )
-	
+
 	oBrowseDown:DisableDetails()
 	oBrowseDown:SetMenuDef( '' ) // Referencia vazia para que nao exiba nenhum botão
 	oBrowseDown:SetProfileID( '2' )
 	oBrowseDown:Activate()
+
+	oBrwRelation:AddRelation( oBrowseUp, oBrowseDown, {;
+		{ 'C6_FILIAL'  , 'xFilial("ZZY" )' } ,;
+		{ 'C6_XOPORTU' , 'ZZY_CODIGO'      } ,;
+		{ 'C6_XITOPOR' , 'ZZY_ITEM'        } } )
+
+	oBrwRelation:Activate()
 
 	ACTIVATE MSDIALOG oDlgPrinc CENTERED
 

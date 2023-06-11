@@ -6,11 +6,11 @@
 
 * Como o produto no protheus tem diferentes correspondentes no nectar, a verificação do de/para do produto precisa ser em um tabela que faz a amarração do código protheus x código nectar.
 
-- Na gravação do cadastro de produto a oportunidade deve ter a flag de produto compatibilizado marcada.
+- Na gravação do cadastro de produto as oportunidades com este produto devem ter a flag de produto compatibilizada marcada.
 
-- Na gravação do cadastro de contato/cliente o código do contato/cliente deve ser preenchido na oportunidade e contato
+- Na gravação do cadastro de contato/cliente as oportunidades com este produto devem ter a flag de produto compatibilizada marcada.
 
-- Ao compatibilizar um oportunidade para pedido selecionar todos os itens da oportunidade.
+- Ao marcar uma oportunidade para compatibilizar pedido selecionar todos os itens da oportunidade.
 
 - Ao selecionar uma oportunidade apenas, permitir optar por venda direta ou indireta
 

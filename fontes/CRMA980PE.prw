@@ -7,22 +7,31 @@ user function CRMA980()
 	Local cIdPonto   := PARAMIXB[2]
 	Local cIdModel   := PARAMIXB[3]
 	Local xRet       := .T.
+	Local cCommand   := ''
 
-	if cIdPonto == 'MODELCOMMITNTTS'
+	if fwIsInCallStack('U_nectarCockipt')
 
-		conOut('*** *** ***') // Grava código do cliente protheus na oportunidade e no cadastro de cliente
+		if cIdPonto == 'MODELCOMMITNTTS'
 
-	elseIf cIdPonto == 'BUTTONBAR'
+			// Marcar Oportunidade como cliente compatibilizado
+			cCommand := " UPDATE " + retSqlName( 'ZZY' )
+			cCommand += " SET ZZY_CLICMP = 'T' "
+			cCommand += " WHERE ZZY_IDCLI = '" + ZZX->ZZX_ID + "' "
 
-		oObj:getModel('SA1MASTER'):setValue('A1_NOME','elton')
+			if tcSqlExec(cCommand ) < 0
 
-		oview := fwviewactive()
+				autoGrLog( 'Erro ao gravar no Banco de Dados: ' + CRLF + TCSQLError() )
+				mostraErro()
 
-        oview:refresh()
+			end if
 
-		xRet := {}
+		elseIf cIdPonto == 'BUTTONBAR'
 
-	else
+			xRet := {}
+
+		else
+
+		end If
 
 	end If
 

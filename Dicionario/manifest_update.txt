@@ -1,7 +1,7 @@
 MANIFESTO DE ATUALIZAÇÃO
 
-Data : 08/06/2023
-Hora : 22:39:43
+Data : 11/06/2023
+Hora : 09:25:30
 Arquivo de atualização diferencial baseado em projeto gerado pelo Configurador
 Projeto : 000001
 Descrição : INTEGRAÇÃO API NECTAR                             
@@ -82,6 +82,42 @@ Tabela : ZZZ
 
 ------------
 SX3
+
+Operação:Inclusão ou Alteração
+Campo : A1_NOME   
+
+Operação:Inclusão ou Alteração
+Campo : A1_PESSOA 
+
+Operação:Inclusão ou Alteração
+Campo : A1_NREDUZ 
+
+Operação:Inclusão ou Alteração
+Campo : A1_END    
+
+Operação:Inclusão ou Alteração
+Campo : A1_BAIRRO 
+
+Operação:Inclusão ou Alteração
+Campo : A1_EST    
+
+Operação:Inclusão ou Alteração
+Campo : A1_COD_MUN
+
+Operação:Inclusão ou Alteração
+Campo : A1_MUN    
+
+Operação:Inclusão ou Alteração
+Campo : A1_DDD    
+
+Operação:Inclusão ou Alteração
+Campo : A1_TEL    
+
+Operação:Inclusão ou Alteração
+Campo : A1_CGC    
+
+Operação:Inclusão ou Alteração
+Campo : B1_DESC   
 
 Operação:Inclusão ou Alteração
 Campo : C6_XOPORTU
@@ -309,6 +345,9 @@ Operação:Inclusão ou Alteração
 Campo : ZZY_CLICMP
 
 Operação:Inclusão ou Alteração
+Campo : ZZY_IDCLI 
+
+Operação:Inclusão ou Alteração
 Campo : ZZY_CLIENT
 
 Operação:Inclusão ou Alteração
@@ -432,10 +471,10 @@ Operação:Inclusão ou Alteração
 Campo : ZZZ_FILIAL
 
 Operação:Inclusão ou Alteração
-Campo : ZZZ_CDPROT
+Campo : ZZZ_CDNECT
 
 Operação:Inclusão ou Alteração
-Campo : ZZZ_CDNECT
+Campo : ZZZ_CDPROT
 
 
 ------------
@@ -457,6 +496,18 @@ Parâmetro : MX_URLNECT
 ------------
 Helps (hlppack*.txt)
 
+Chave : A1_NOME   
+Chave : A1_PESSOA 
+Chave : A1_NREDUZ 
+Chave : A1_END    
+Chave : A1_BAIRRO 
+Chave : A1_EST    
+Chave : A1_COD_MUN
+Chave : A1_MUN    
+Chave : A1_DDD    
+Chave : A1_TEL    
+Chave : A1_CGC    
+Chave : B1_DESC   
 Chave : C6_XOPORTU
 Chave : C6_XITOPOR
 Chave : C6_XCOPORT
@@ -529,6 +580,7 @@ Chave : ZZX_JSON
 Chave : ZZY_OK    
 Chave : ZZY_CODIGO
 Chave : ZZY_CLICMP
+Chave : ZZY_IDCLI 
 Chave : ZZY_CLIENT
 Chave : ZZY_NOME  
 Chave : ZZY_PRDCMP
@@ -569,5 +621,5 @@ Chave : ZZY_MTDESC
 Chave : ZZY_VNDBAS
 Chave : ZZY_PEDGER
 Chave : ZZY_JSON  
-Chave : ZZZ_CDPROT
 Chave : ZZZ_CDNECT
+Chave : ZZZ_CDPROT
