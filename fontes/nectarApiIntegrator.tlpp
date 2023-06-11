@@ -10,6 +10,8 @@ user function nectarApiIntegrator( aParam )
 	local cEmp   := aParam[ nTam - 3 ]
 	local cFil   := aParam[ nTam - 2 ]
 
+	varinfo('',aParam,,.F.,.T.)
+
 	if rpcSetEnv( cEmp, cFil )
 
 		private cUrl           := superGetMv( 'MX_URLNECT' )
@@ -22,7 +24,15 @@ user function nectarApiIntegrator( aParam )
 
 			UnlockByName( ProcName(), .T., .T., .F.)
 
+		else
+
+			conOut('Rotina já está em execução: ' + cEmp + '/' + cFil)
+
 		end if
+
+	else
+
+		conOut('Não foi possível conectar na Empresa: ' + cEmp + '/' + cFil)
 
 	end if
 
@@ -111,7 +121,7 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 					ZZY->ZZY_PEDGER := .F.
 					ZZY->ZZY_CLICMP := ! empty( posicione( 'SA1', 3, xFilial( 'SA1' ) + aOportunidades[ nX ]['cliente']['cnpj'], 'A1_CGC' ) )
 					ZZY->ZZY_PRDCMP := ! empty( posicione( 'ZZZ', 2, xFilial( 'ZZZ' ) + aOportunidades[ nX ]['produtos'][nY]['codigo'], 'ZZZ_CDNECT' ) )
-					ZZY->ZZY_IDCLI  := aOportunidades[ nX ]['cliente']['id']
+					ZZY->ZZY_IDCLI  := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
 					// ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
 
 					ZZY->( msUnlock() )
@@ -265,7 +275,7 @@ static function gravaProduto( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 			ZZV->ZZV_DSCMAX	:= jProduto['descontoMaximo']
 			ZZV->ZZV_DESCRI	:= jProduto['nome']
 			ZZV->ZZV_EDPRDP	:= jProduto['editarProdutosDependentes']
-			ZZV->ZZV_ID    	:= cValToChar( jProduto['2265029'] )
+			ZZV->ZZV_ID    	:= cValToChar( jProduto['id'] )
 			ZZV->ZZV_COMPRC	:= jProduto['comissaoPorcentual']
 			ZZV->ZZV_DSCPRC	:= jProduto['descontoPorcentual']
 			ZZV->ZZV_MOEDA 	:= jProduto['moeda']

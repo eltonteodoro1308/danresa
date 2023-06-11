@@ -8,10 +8,11 @@ user function nectarCockipt()
 	Local oDlgPrinc    := nil
 	Local oPanelUp     := nil
 	Local oPanelDown   := nil
-	Local oBrowseUp    := nil
 	Local oBrowseDown  := nil
 	Local oFWLayer     := FWLayer():New()
 	Local oBrwRelation := FWBrwRelation():New()
+	
+	Private oBrowseUp    := nil
 
 	Define MsDialog oDlgPrinc Title 'Cockipt' From aCoors[1], aCoors[2] To aCoors[3], aCoors[4] Pixel
 
@@ -32,6 +33,7 @@ user function nectarCockipt()
 	oBrowseUp:DisableReport()
 
 	oBrowseUp:SetFieldMark( 'ZZY_OK' )
+	oBrowseUp:SetAfterMark({|a,b,c,d,e,f,g,h,i,j|tstAfterMark(a,b,c,d,e,f,g,h,i,j)})
 
 	oBrowseUp:AddLegend( 'ZZY->ZZY_PEDGER' , 'GREEN', 'Pedido Gerado'     )
 	oBrowseUp:AddLegend( '!ZZY->ZZY_PEDGER',   'RED', 'Pedido Não Gerado' )
@@ -65,5 +67,9 @@ user function nectarCockipt()
 	oBrwRelation:Activate()
 
 	ACTIVATE MSDIALOG oDlgPrinc CENTERED
+
+return
+
+static function tstAfterMark(a,b,c,d,e,f,g,h,i,j)
 
 return

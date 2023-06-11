@@ -92,7 +92,23 @@ user function XINC410()
 	Private cCadastro  := "Atualização de Pedidos de Venda"
 	Private INCLUI     := .T.
 	Private aRotina    := FWLoadMenuDef( 'MATA410' )
+/* 
+	if ! ZZY->ZZY_CLICMP
 
+		apMsgStop( 'Cliente não compatibilizado !!!!', 'Atenção !!!' )
+
+		return
+
+	end if
+
+	if ! ZZY->ZZY_PRDCMP
+
+		apMsgStop( 'Produto não compatibilizado !!!!', 'Atenção !!!' )
+
+		return
+
+	end if
+ */
 	A410Inclui(/*cAlias*/,/*nReg*/, nOpc /*,lOrcamento,nStack,aRegSCK,lContrat,nTpContr,cCodCli,cLoja,cMedPMS*/)
 
 return
