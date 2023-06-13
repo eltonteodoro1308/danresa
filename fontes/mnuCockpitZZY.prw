@@ -87,12 +87,19 @@ return
 
 user function XINC410()
 
-	Local nOpc := 3
+	Local nOpc      := 3
+	Local aArea     := getArea()
+	Local aLstOp    := {}
+	Local nPos      := 0
+	Local lIndireta := .T.
+
+	Private jSC5   := jsonObject():new()
+	Private aSC6   := {}
 
 	Private cCadastro  := "Atualização de Pedidos de Venda"
 	Private INCLUI     := .T.
 	Private aRotina    := FWLoadMenuDef( 'MATA410' )
-/* 
+
 	if ! ZZY->ZZY_CLICMP
 
 		apMsgStop( 'Cliente não compatibilizado !!!!', 'Atenção !!!' )
@@ -108,8 +115,71 @@ user function XINC410()
 		return
 
 	end if
- */
+
+	dbSelectArea('ZZX')
+	ZZX->( dbSetOrder( 3 ) )
+
+	dbselectarea('ZZZ')
+	ZZZ->( dbSetOrder( 1 ) )
+
+	ZZY->( DbGoTop() )
+
+	do while ZZY->( ! eof() )
+
+		if _oBrowseUp:isMark( _oBrowseUp:Mark() )
+
+			if empty( nPos := aScan( aLstOp, ZZY->ZZY_CODIGO ) )
+
+				aAdd( aLstOp, ZZY->ZZY_CODIGO )
+
+			end if
+
+			jSC5['CLIENTE'] := posicione( 'SA1', 3, xFilial( 'SA1' ) +;
+				posicione( 'ZZX', 3, xFilial( 'ZZX' ) + allTrim( ZZY->ZZY_CLIENT ), 'ZZX_CNPJ' ), 'A1_COD' )
+
+			jSC5['LOJA']    := posicione( 'SA1', 3, xFilial( 'SA1' ) +;
+				posicione( 'ZZX', 3, xFilial( 'ZZX' ) + allTrim( ZZY->ZZY_CLIENT ), 'ZZX_CNPJ' ), 'A1_LOJA' )
+
+			aAdd( aSC6, jsonObject():new() )
+
+			aTail( aSc6 )['PRODUTO']              := posicione( 'ZZZ', 2, xFilial( 'ZZZ' ) + ZZY->ZZY_PRODUT, 'ZZZ_CDPROT' )
+			aTail( aSc6 )['QUANTIDADE']           := ZZY->ZZY_QTDPRD
+			aTail( aSc6 )['VALOR_UNITARIO']       := ZZY->ZZY_VLUNPD
+			aTail( aSc6 )['OPORTUNIDADE']         := ZZY->ZZY_CODIGO
+			aTail( aSc6 )['CLIENTE_OPORTUNIDADE'] := jSC5['CLIENTE']
+			aTail( aSc6 )['LOJA_OPORTUNIDADE']    := jSC5['LOJA']
+			aTail( aSc6 )['ITEM_OPORTUNIDADE']    := ZZY->ZZY_ITEM
+
+		end if
+
+		ZZY->( DbSkip() )
+
+	end do
+
+	if len( aLstOp ) == 1
+
+		lIndireta := aviso( 'Tipo de Venda', 'Informe o tipo de venda', { 'Direta', 'indireta' }, 3 ) == 2
+
+	end if
+
+	if lIndireta
+
+		pergunte( 'NECINDIRET')
+
+		jSC5['CLIENTE'] := MV_PAR01
+		jSC5['LOJA'] := MV_PAR01
+
+		for nPos := 1 to len( aSc6 )
+
+			aSc6[ nPos ][ 'VALOR_UNITARIO' ] *= ( MV_PAR03/100 )
+
+		next nPos
+
+	end if
+
 	A410Inclui(/*cAlias*/,/*nReg*/, nOpc /*,lOrcamento,nStack,aRegSCK,lContrat,nTpContr,cCodCli,cLoja,cMedPMS*/)
+
+	restArea( aArea )
 
 return
 

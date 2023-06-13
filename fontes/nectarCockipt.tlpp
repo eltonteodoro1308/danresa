@@ -8,11 +8,10 @@ user function nectarCockipt()
 	Local oDlgPrinc    := nil
 	Local oPanelUp     := nil
 	Local oPanelDown   := nil
+	Local oBrowseUp    := nil
 	Local oBrowseDown  := nil
 	Local oFWLayer     := FWLayer():New()
 	Local oBrwRelation := FWBrwRelation():New()
-	
-	Private oBrowseUp    := nil
 
 	Define MsDialog oDlgPrinc Title 'Cockipt' From aCoors[1], aCoors[2] To aCoors[3], aCoors[4] Pixel
 
@@ -26,14 +25,16 @@ user function nectarCockipt()
 	oFWLayer:AddCollumn( 'ALL' , 100, .T., 'DOWN' )
 	oPanelDown := oFWLayer:GetColPanel( 'ALL', 'DOWN' )
 
-	oBrowseUp := FWMarkBrowse():New()
+	oBrowseUp := _oBrowseUp := FWMarkBrowse():New()
 	oBrowseUp:SetOwner( oPanelUp )
 	oBrowseUp:SetDescription( "Oportunidades" )
 	oBrowseUp:SetAlias( 'ZZY' )
 	oBrowseUp:DisableReport()
 
 	oBrowseUp:SetFieldMark( 'ZZY_OK' )
-	oBrowseUp:SetAfterMark({|a,b,c,d,e,f,g,h,i,j|tstAfterMark(a,b,c,d,e,f,g,h,i,j)})
+	oBrowseUp:SetAfterMark({||afterMark(),oBrowseUp:Refresh(.F.)})
+	oBrowseUp:SetAllMark( {|| .T. } )
+	oBrowseUp:setValid( { || !ZZY->ZZY_PEDGER } )
 
 	oBrowseUp:AddLegend( 'ZZY->ZZY_PEDGER' , 'GREEN', 'Pedido Gerado'     )
 	oBrowseUp:AddLegend( '!ZZY->ZZY_PEDGER',   'RED', 'Pedido Não Gerado' )
@@ -70,6 +71,27 @@ user function nectarCockipt()
 
 return
 
-static function tstAfterMark(a,b,c,d,e,f,g,h,i,j)
+static function afterMark()
+
+	Local aArea         := getArea()
+	Local cOportunidade := ZZY->ZZY_CODIGO
+	Local cSeek         := xFilial( 'ZZY' ) + cOportunidade
+	Local cMark         := ZZY->ZZY_OK
+
+	ZZY->( dbGotop() )
+
+	msSeek( cSeek )
+
+	do while ZZY->( !EOF() .And. ZZY_FILIAL + ZZY_CODIGO == cSeek )
+
+		RecLock( 'ZZY', .F. )
+		ZZY->ZZY_OK := cMark
+		ZZY->( MsUnlock() )
+
+		ZZY->( dbSkip() )
+
+	end do
+
+	restArea( aArea )
 
 return

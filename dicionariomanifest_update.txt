@@ -1,7 +1,7 @@
 MANIFESTO DE ATUALIZAÇÃO
 
 Data : 13/06/2023
-Hora : 02:45:00
+Hora : 02:35:50
 Arquivo de atualização diferencial baseado em projeto gerado pelo Configurador
 Projeto : 000001
 Descrição : INTEGRAÇÃO API NECTAR                             
