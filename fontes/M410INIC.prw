@@ -2,30 +2,27 @@
 
 user function M410INIC()
 
-	Local nPos := 0
-	Local nX := 0
+	// Local nX := 0
 
 	M->C5_CLIENTE := jSC5['CLIENTE']
 	M->C5_LOJA    := jSC5['LOJA']
 
-	for nX := 2 to len( aSC6 )
+	// aSize( oGetDad:aCols, 0 )
 
-		aAdd( aCols, aClone( aCols[1] ) )
+	// for nX := 1 to len( aSC6 )
 
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_ITEM' }) ] := strZero( nX, tamSx3('C6_ITEM')[1] )
+	// 	oGetDad:AddLine(.T.)
 
-	next nX
+	// 	GDFieldPut( 'C6_PRODUTO', aSc6[nX]['PRODUTO'             ], oGetDad:nAt, oGetDad:aHeader ,oGetDad:aCols )
+	// 	GDFieldPut( 'C6_QTDVEN' , aSc6[nX]['QUANTIDADE'          ], oGetDad:nAt, oGetDad:aHeader ,oGetDad:aCols )
+	// 	GDFieldPut( 'C6_PRCVEN ', aSc6[nX]['VALOR_UNITARIO'      ], oGetDad:nAt, oGetDad:aHeader ,oGetDad:aCols )
+	// 	GDFieldPut( 'C6_XOPORTU', aSc6[nX]['OPORTUNIDADE'        ], oGetDad:nAt, oGetDad:aHeader ,oGetDad:aCols )
+	// 	GDFieldPut( 'C6_XCOPORT', aSc6[nX]['CLIENTE_OPORTUNIDADE'], oGetDad:nAt, oGetDad:aHeader ,oGetDad:aCols )
+	// 	GDFieldPut( 'C6_LJOPORT', aSc6[nX]['LOJA_OPORTUNIDADE'   ], oGetDad:nAt, oGetDad:aHeader ,oGetDad:aCols )
+	// 	GDFieldPut( 'C6_XITOPOR', aSc6[nX]['ITEM_OPORTUNIDADE'   ], oGetDad:nAt, oGetDad:aHeader ,oGetDad:aCols )
 
-	for nX := 1 to len( aSC6 )
+	// 	oGetd:LinhaOk(.T.,.T.)
 
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_PRODUTO' }) ] := aSc6[nX]['PRODUTO']
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_QTDVEN'  }) ] := aSc6[nX]['QUANTIDADE']
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_PRCVEN ' }) ] := aSc6[nX]['VALOR_UNITARIO']
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_XOPORTU' }) ] := aSc6[nX]['OPORTUNIDADE']
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_XCOPORT' }) ] := aSc6[nX]['CLIENTE_OPORTUNIDADE']
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_LJOPORT' }) ] := aSc6[nX]['LOJA_OPORTUNIDADE']
-		aCols[ nX, aScan( aHeader, {|item| alltrim(item[2]) == 'C6_XITOPOR' }) ] := aSc6[nX]['ITEM_OPORTUNIDADE']
-
-	next nX
+	// next nX
 
 return
