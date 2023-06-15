@@ -2,7 +2,11 @@
 #include 'tlpp-core.th'
 
 user function testenectarApiIntegrator( )
-return u_nectarApiIntegrator( {'99','01','',''} )
+
+	// local aParam := {'99','01','',''}
+	local aParam := {'01','0101','',''}
+
+return u_nectarApiIntegrator( aParam )
 
 user function nectarApiIntegrator( aParam )
 
@@ -57,9 +61,11 @@ return
 
 static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, cContentType )
 
-	local cId := ''
-	local nX  := 1
-	local nY  := 1
+	local cId   := ''
+	local nX    := 1
+	local nY    := 1
+	local aArea := getArea()
+	local cSeek := ''
 
 	if cHttpCode == '200'
 
@@ -119,8 +125,21 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 					ZZY->ZZY_MTDESC := ''
 					ZZY->ZZY_VNDBAS := .F.
 					ZZY->ZZY_PEDGER := .F.
-					ZZY->ZZY_CLICMP := ! empty( posicione( 'SA1', 3, xFilial( 'SA1' ) + aOportunidades[ nX ]['cliente']['cnpj'], 'A1_CGC' ) )
-					ZZY->ZZY_PRDCMP := ! empty( posicione( 'ZZZ', 2, xFilial( 'ZZZ' ) + aOportunidades[ nX ]['produtos'][nY]['codigo'], 'ZZZ_CDNECT' ) )
+
+					dbSelectArea( 'SA1' )
+					SA1->( dbSetOrder( 3 ) )
+
+					cSeek := xFilial( 'SA1' ) + cValToChar( aOportunidades[ nX ]['cliente']['cnpj'] )
+
+					ZZY->ZZY_CLICMP := SA1->( msSeek( cSeek ) .And. cSeek == A1_COD + A1_LOJA )
+
+					dbSelectArea( 'ZZZ' )
+					SA1->( dbSetOrder( 2 ) )
+
+					cSeek := xFilial( 'ZZZ' ) + cValToChar( aOportunidades[ nX ]['produtos'][nY]['codigo'] )
+
+					ZZY->ZZY_PRDCMP := ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ZZZ_CDNECT ) 					
+					
 					ZZY->ZZY_IDCLI  := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
 					// ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
 
@@ -142,6 +161,8 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 		conout( 'Não foi possível integrar com a API do Nectar CRM.' )
 
 	end if
+
+	restArea( aArea )
 
 return
 
@@ -344,9 +365,9 @@ static function codificaJson( cJson )
 	local nX    := 0
 	local cChar := ''
 
-	for nX := 1 to len( cUrl )
+	for nX := 1 to len( cJson )
 
-		cChar := subStr( cUrl, nX, 1 )
+		cChar := subStr( cJson, nX, 1 )
 
 		if ( ( asc( cChar ) >= 048 .And. asc( cChar ) <= 057 ) .Or.;
 				( asc( cChar ) >= 065 .And. asc( cChar ) <= 090 ) .Or.;
