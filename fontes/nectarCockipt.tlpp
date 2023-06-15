@@ -49,6 +49,7 @@ user function nectarCockipt()
 	oBrowseDown:SetOwner( oPanelDown )
 	oBrowseDown:SetDescription( 'Itens Pedido de Venda' )
 	oBrowseDown:SetAlias( 'SC6' )
+	oBrowseDown:SetFilterDefault( "!EMPTY(SC6->C6_XOPORTU)" )
 	oBrowseDown:DisableReport()
 
 	oBrowseDown:AddLegend( 'SC6->( C6_QTDENT == 0 )'         , 'GREEN' , 'Não Faturado'          )
