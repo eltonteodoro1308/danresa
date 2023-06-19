@@ -26,6 +26,7 @@ user function nectarCockipt()
 	oPanelDown := oFWLayer:GetColPanel( 'ALL', 'DOWN' )
 
 	oBrowseUp := _oBrowseUp := FWMarkBrowse():New()
+	oBrowseUp:SetSemaphore(.T.)
 	oBrowseUp:SetOwner( oPanelUp )
 	oBrowseUp:SetDescription( "Oportunidades" )
 	oBrowseUp:SetAlias( 'ZZY' )

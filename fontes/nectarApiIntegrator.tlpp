@@ -66,6 +66,7 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 	local nY    := 1
 	local aArea := getArea()
 	local cSeek := ''
+	local lCliCmp := .T.
 
 	if cHttpCode == '200'
 
@@ -80,6 +81,15 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 			cId := cValToChar( aOportunidades[ nX ]['id'] )
 
 			if ! ZZY->( msSeek( xFilial( 'ZZY' ) + cId ) )
+
+				// Verifica se contato já está cadastrado na base de Clientes
+				dbSelectArea( 'SA1' )
+				SA1->( dbSetOrder( 3 ) )
+
+				cSeek := xFilial( 'SA1' ) + alltrim( cValToChar( aOportunidades[ nX ]['cliente']['cnpj'] ) +;
+					cValToChar( aOportunidades[ nX ]['cliente']['cpf'] ) )
+
+				lCliCmp := SA1->( msSeek( cSeek ) .And. cSeek == A1_FILIAL + A1_CGC )
 
 				for nY := 1 to len( aOportunidades[ nX ]['produtos'] )
 
@@ -125,23 +135,18 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 					ZZY->ZZY_MTDESC := ''
 					ZZY->ZZY_VNDBAS := .F.
 					ZZY->ZZY_PEDGER := .F.
+					ZZY->ZZY_CLICMP := lCliCmp
 
-					dbSelectArea( 'SA1' )
-					SA1->( dbSetOrder( 3 ) )
-
-					cSeek := xFilial( 'SA1' ) + cValToChar( aOportunidades[ nX ]['cliente']['cnpj'] )
-
-					ZZY->ZZY_CLICMP := SA1->( msSeek( cSeek ) .And. cSeek == A1_COD + A1_LOJA )
-
+					// Verifica se já há amarrração do produto Protheus com produto Nectar
 					dbSelectArea( 'ZZZ' )
 					SA1->( dbSetOrder( 2 ) )
 
 					cSeek := xFilial( 'ZZZ' ) + cValToChar( aOportunidades[ nX ]['produtos'][nY]['codigo'] )
 
-					ZZY->ZZY_PRDCMP := ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ZZZ_CDNECT ) 					
-					
+					ZZY->ZZY_PRDCMP := ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ZZZ_CDNECT )
+
 					ZZY->ZZY_IDCLI  := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
-					// ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
+					ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
 
 					ZZY->( msUnlock() )
 
@@ -150,6 +155,7 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 				next nY
 
 				buscaContato( cValToChar( aOportunidades[ nX ]['cliente']['id'] ) )
+
 				integraOportunidade( cValToChar( aOportunidades[ nX ]['id'] ) )
 
 			end if
@@ -240,7 +246,7 @@ static function gravaContato( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 			ZZX->ZZX_RGPAIS := jContato['regiaoPais']['nome']
 			ZZX->ZZX_RGESTD := jContato['regiaoEstado']['sigla']
 			ZZX->ZZX_RGMUNC := jContato['regiaoMunicipio']['nome']
-			// ZZX->ZZX_JSON   := jContato:toJson()
+			ZZX->ZZX_JSON   := jContato:toJson()
 
 			ZZX->( msUnlock() )
 
@@ -311,7 +317,7 @@ static function gravaProduto( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 			ZZV->ZZV_ITCUST	:= ''
 			ZZV->ZZV_FXPREC	:= ''
 			ZZV->ZZV_VLBSCP	:= 0
-			// ZZV->ZZV_JSON  	:= jProduto:toJson()
+			ZZV->ZZV_JSON  	:= jProduto:toJson()
 
 			ZZV->( msUnlock() )
 
