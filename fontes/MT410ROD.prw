@@ -2,7 +2,13 @@
 
 user function MT410ROD()
 
-	Local nX      := 0
+	Local nX       := 0
+
+	if type('_lAcolsPop') == 'U'
+
+		public _lAcolsPop := .F.
+
+	end if
 
     /*
     PARAMIXB[1] - Objeto   - Objeto do rodape do pedido de venda.	
@@ -12,10 +18,15 @@ user function MT410ROD()
     PARAMIXB[5] - Numérico - Valor liquido do pedido de venda.
     */
 
-	if fwIsInCallStack('U_nectarCockipt')
+	if fwIsInCallStack('U_nectarCockipt') .and. !_lAcolsPop
+
+		_lAcolsPop := .T.
 
 		M->C5_CLIENTE := jSC5['CLIENTE']
-		M->C5_LOJA    := jSC5['LOJA']
+		M->C5_LOJACLI := jSC5['LOJA']
+		M->C5_TIPO    := jSC5['TIPO'] 
+		M->C5_CONDPAG := jSC5['CONDPAG'] 
+		M->C5_NATUREZ := jSC5['NATUREZA']
 
 		for nX := 1 to len( aSC6 )
 
@@ -28,6 +39,12 @@ user function MT410ROD()
 			GDFieldPut( 'C6_PRODUTO', aSc6[nX]['PRODUTO'             ], n, aHeader , aCols )
 			GDFieldPut( 'C6_QTDVEN' , aSc6[nX]['QUANTIDADE'          ], n, aHeader , aCols )
 			GDFieldPut( 'C6_PRCVEN ', aSc6[nX]['VALOR_UNITARIO'      ], n, aHeader , aCols )
+			/*TODO INCLUIR NO ITEM DO PEDIDO
+			descrição produto
+			valor total
+			tes saída
+			armazém
+			*/
 			GDFieldPut( 'C6_XOPORTU', aSc6[nX]['OPORTUNIDADE'        ], n, aHeader , aCols )
 			GDFieldPut( 'C6_XCOPORT', aSc6[nX]['CLIENTE_OPORTUNIDADE'], n, aHeader , aCols )
 			GDFieldPut( 'C6_XLJOPOR', aSc6[nX]['LOJA_OPORTUNIDADE'   ], n, aHeader , aCols )

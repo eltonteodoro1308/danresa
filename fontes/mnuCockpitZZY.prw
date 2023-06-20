@@ -87,16 +87,30 @@ return
 
 user function XINC010()
 
-	Local aArea := getArea()
-	local cSeek := ZZY->( ZZY_PRODUT )//ZZV->ZZV_CODIGO
+	Local aArea    := getArea()
+	local cSeek    :=  ZZY->( xFilial( 'ZZZ' ) + allTrim( ZZY_PRODUT ) )
+	local lSeekZZZ := .F.
+	local cCommand := ''
 
+	dbSelectArea( 'ZZZ' )
+	ZZZ->( dbSetOrder( 2 ) ) //ZZZ_FILIAL+ZZZ_CDNECT+ZZZ_CDPROT
+	ZZZ->( lSeekZZZ := msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + allTrim( ZZZ_CDNECT ) )
 
-	//TODO Verificar se produto esta na base mesmo que a oportunidade indique
-	// que o mesmo não está compatibilizado e marcar oportunidade com produto compatibilizado
-	//TODO Após cadastar produto marcar oportunidades com produto compatibilizado
-	if ZZY->ZZY_PRDCMP
+	if ZZY->ZZY_PRDCMP .Or. lSeekZZZ
 
 		apMsgInfo( 'Produto já Compatibilizado !!!', 'Atenção !!!' )
+
+		// Marcar Oportunidade como produto compatibilizado
+		cCommand := " UPDATE " + retSqlName( 'ZZY' )
+		cCommand += " SET ZZY_PRDCMP = 'T' "
+		cCommand += " WHERE ZZY_PRODUT = '" + ZZV->ZZV_CODIGO + "' "
+
+		if tcSqlExec(cCommand ) < 0
+
+			autoGrLog( 'Erro ao gravar no Banco de Dados: ' + CRLF + TCSQLError() )
+			mostraErro()
+
+		end if
 
 	else
 
@@ -123,9 +137,10 @@ user function XINC410()
 
 	Local nOpc      := 3
 	Local aArea     := getArea()
-	Local aLstOp    := {}
 	Local nPos      := 0
 	Local lIndireta := .T.
+	Local cSeekZZX  := ''
+	Local cSeekSA1  := ''
 
 	Private jSC5   := jsonObject():new()
 	Private aSC6   := {}
@@ -134,21 +149,7 @@ user function XINC410()
 	Private INCLUI     := .T.
 	Private aRotina    := FWLoadMenuDef( 'MATA410' )
 
-	if ! ZZY->ZZY_CLICMP
-
-		apMsgStop( 'Cliente não compatibilizado !!!!', 'Atenção !!!' )
-
-		return
-
-	end if
-
-	if ! ZZY->ZZY_PRDCMP
-
-		apMsgStop( 'Produto não compatibilizado !!!!', 'Atenção !!!' )
-
-		return
-
-	end if
+	public _aLstOport := {}
 
 	dbSelectArea('ZZX')
 	ZZX->( dbSetOrder( 3 ) )
@@ -162,17 +163,39 @@ user function XINC410()
 
 		if _oBrowseUp:isMark( _oBrowseUp:Mark() )
 
+			aSize( _aLstOport, 0 )
+
 			if empty( nPos := aScan( aLstOp, ZZY->ZZY_CODIGO ) )
 
-				aAdd( aLstOp, ZZY->ZZY_CODIGO )
+				aAdd( _aLstOport, ZZY->ZZY_CODIGO )
 
 			end if
 
-			jSC5['CLIENTE'] := posicione( 'SA1', 3, xFilial( 'SA1' ) +;
-				posicione( 'ZZX', 3, xFilial( 'ZZX' ) + allTrim( ZZY->ZZY_CLIENT ), 'ZZX_CNPJ' ), 'A1_COD' )
+			if empty( jSC5['CLIENTE'] )
 
-			jSC5['LOJA']    := posicione( 'SA1', 3, xFilial( 'SA1' ) +;
-				posicione( 'ZZX', 3, xFilial( 'ZZX' ) + allTrim( ZZY->ZZY_CLIENT ), 'ZZX_CNPJ' ), 'A1_LOJA' )
+				dbSelectArea( 'ZZX' )
+				ZZX->( dbSetOrder( 3 ) )
+
+				if ZZX->( msSeek( cSeekZZX := xFilial( 'ZZX' ) + allTrim( ZZY->ZZY_CLIENT ) ) .And.;
+						cSeekZZX == ZZX_FILIAL + ZZX_ID )
+
+					dbSelectArea( 'SA1' )
+					SA1->( dbSetOrder( 3 ) )
+
+					if SA1->( msSeek( cSeekSA1 := xFilial( 'SA1' ) + allTrim( ZZX->( ZZX_CPF + ZZX_CNPJ ) ) ) .And.;
+							cSeekSA1 == A1_FILIAL + A1_CGC )
+
+						jSC5['CLIENTE']  := SA1->A1_COD
+						jSC5['LOJA']     := SA1->A1_LOJA
+						jSC5['TIPO']     := SA1->A1_TIPO
+						jSC5['CONDPAG']  := SA1->A1_COND
+						jSC5['NATUREZA'] := SA1->A1_NATUREZ
+
+					end if
+
+				end if
+
+			end if
 
 			aAdd( aSC6, jsonObject():new() )
 
@@ -184,13 +207,22 @@ user function XINC410()
 			aTail( aSc6 )['LOJA_OPORTUNIDADE']    := jSC5['LOJA']
 			aTail( aSc6 )['ITEM_OPORTUNIDADE']    := ZZY->ZZY_ITEM
 
+	/*TODO Definir no item do pedido os seguintes itens
+			descrição produto
+			valor total
+			tes saída
+			armazém
+			*/
+
+     //TODO armazém padrão
+
 		end if
 
 		ZZY->( DbSkip() )
 
 	end do
 
-	if len( aLstOp ) == 1
+	if len( _aLstOport ) == 1
 
 		lIndireta := aviso( 'Tipo de Venda', 'Informe o tipo de venda', { 'Direta', 'indireta' }, 3 ) == 2
 
@@ -201,7 +233,7 @@ user function XINC410()
 		pergunte( 'NECINDIRET')
 
 		jSC5['CLIENTE'] := MV_PAR01
-		jSC5['LOJA'] := MV_PAR01
+		jSC5['LOJA']    := MV_PAR02
 
 		for nPos := 1 to len( aSc6 )
 

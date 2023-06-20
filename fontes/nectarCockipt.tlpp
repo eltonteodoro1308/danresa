@@ -35,7 +35,7 @@ user function nectarCockipt()
 	oBrowseUp:SetFieldMark( 'ZZY_OK' )
 	oBrowseUp:SetAfterMark({||afterMark(),oBrowseUp:Refresh(.F.)})
 	oBrowseUp:SetAllMark( {|| .T. } )
-	oBrowseUp:setValid( { || !ZZY->ZZY_PEDGER } )
+	oBrowseUp:setValid( { || validMark() } )
 
 	oBrowseUp:AddLegend( 'ZZY->ZZY_PEDGER' , 'GREEN', 'Pedido Gerado'     )
 	oBrowseUp:AddLegend( '!ZZY->ZZY_PEDGER',   'RED', 'Pedido Não Gerado' )
@@ -72,6 +72,34 @@ user function nectarCockipt()
 	ACTIVATE MSDIALOG oDlgPrinc CENTERED
 
 return
+
+static function validMark()
+
+	if ZZY->ZZY_PEDGER
+
+		apMsgStop( 'A oportunidade já teve o pedido de venda gerado.', 'Atenção !!!' )
+
+		return .F.
+
+	end if
+
+	if ! ZZY->ZZY_CLICMP
+
+		apMsgStop( 'O contato não foi compatibilizado.', 'Atenção !!!' )
+
+		return .F.
+
+	end if
+	
+	if ! ZZY->ZZY_PRDCMP
+
+		apMsgStop( 'O produto não foi compatibilizado.', 'Atenção !!!' )
+
+		return .F.
+
+	end if
+
+return .T.
 
 static function afterMark()
 
