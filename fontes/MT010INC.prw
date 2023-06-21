@@ -24,7 +24,7 @@ user function MT010INC()
 		dbSelectArea( 'SB2' )
 		SB2->( dbSetOrder( 1 ) )
 
-		if ! SB2->( msSeek( cSeekSB2 := xFilial( 'SB2' ) + B1_COD + B1_LOCPAD ) .And.;
+		if ! SB2->( msSeek( cSeekSB2 := xFilial( 'SB2' ) + SB1->( B1_COD + B1_LOCPAD ) ) .And.;
 				cSeekSB2 == B2_FILIAL + B2_COD + B2_LOCAL )
 
 			SB1->( CriaSB2( B1_COD, B1_LOCPAD ) ) // Gera Local de Estocagem do Produto

@@ -36,19 +36,17 @@ user function MT410ROD()
 
 			end if
 
-			GDFieldPut( 'C6_PRODUTO', aSc6[nX]['PRODUTO'             ], n, aHeader , aCols )
-			GDFieldPut( 'C6_QTDVEN' , aSc6[nX]['QUANTIDADE'          ], n, aHeader , aCols )
-			GDFieldPut( 'C6_PRCVEN ', aSc6[nX]['VALOR_UNITARIO'      ], n, aHeader , aCols )
-			/*TODO INCLUIR NO ITEM DO PEDIDO
-			descrição produto
-			valor total
-			tes saída
-			armazém
-			*/
-			GDFieldPut( 'C6_XOPORTU', aSc6[nX]['OPORTUNIDADE'        ], n, aHeader , aCols )
-			GDFieldPut( 'C6_XCOPORT', aSc6[nX]['CLIENTE_OPORTUNIDADE'], n, aHeader , aCols )
-			GDFieldPut( 'C6_XLJOPOR', aSc6[nX]['LOJA_OPORTUNIDADE'   ], n, aHeader , aCols )
-			GDFieldPut( 'C6_XITOPOR', aSc6[nX]['ITEM_OPORTUNIDADE'   ], n, aHeader , aCols )
+			GDFieldPut( 'C6_PRODUTO',      cValToChar( aSc6[nX]['PRODUTO'             ] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_DESCRI' ,      cValToChar( aSc6[nX]['DESCRICAO_PRODUTO'   ] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_TES'    ,      cValToChar( aSc6[nX]['TES_SAIDA'           ] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_LOCAL'  ,      cValToChar( aSc6[nX]['ARMAZEM'             ] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_XOPORTU',      cValToChar( aSc6[nX]['OPORTUNIDADE'        ] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_XCOPORT',      cValToChar( aSc6[nX]['CLIENTE_OPORTUNIDADE'] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_XLJOPOR',      cValToChar( aSc6[nX]['LOJA_OPORTUNIDADE'   ] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_XITOPOR',      cValToChar( aSc6[nX]['ITEM_OPORTUNIDADE'   ] )  , n, aHeader , aCols )
+			GDFieldPut( 'C6_QTDVEN' , val( cValToChar( aSc6[nX]['QUANTIDADE'          ] ) ), n, aHeader , aCols )
+			GDFieldPut( 'C6_PRCVEN ', val( cValToChar( aSc6[nX]['VALOR_UNITARIO'      ] ) ), n, aHeader , aCols )
+			GDFieldPut( 'C6_VALOR'  , val( cValToChar( aSc6[nX]['VALOR_TOTAL'         ] ) ), n, aHeader , aCols )
 
 			oGetDad:LinhaOk(.T.,.T.)
 

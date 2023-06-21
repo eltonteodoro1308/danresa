@@ -5,10 +5,12 @@ static function menudef()
 
 	local aRet := {}
 
-	aAdd( aRet, { 'Gerar Pedido'            , 'U_XINC410' , 0, 8, 0,,, } )
-	aAdd( aRet, { 'Compatibilizar Cliente'  , 'U_XINC980' , 0, 8, 0,,, } )
-	aAdd( aRet, { 'Compatibilizar Produto'  , 'U_XINC010' , 0, 8, 0,,, } )
-	aAdd( aRet, { 'Visualizar Oportunidade' , 'U_viewZZY' , 0, 8, 0,,, } )
+	aAdd( aRet, { 'Gerar Pedido'            , 'U_XINC410'  , 0, 8, 0,,, } )
+	aAdd( aRet, { 'Compatibilizar Cliente'  , 'U_XINC980'  , 0, 8, 0,,, } )
+	aAdd( aRet, { 'Compatibilizar Produto'  , 'U_XINC010'  , 0, 8, 0,,, } )
+	aAdd( aRet, { 'Visualizar Oportunidade' , 'U_viewZZY'  , 0, 8, 0,,, } )
+	aAdd( aRet, { 'Excluir Oportunidade'    , 'U_ExclZZY'  , 0, 8, 0,,, } )
+	aAdd( aRet, { 'Incluir Comentário'      , 'U_ComntZZY' , 0, 8, 0,,, } )
 
 return aRet
 
@@ -155,7 +157,13 @@ user function XINC410()
 	ZZX->( dbSetOrder( 3 ) )
 
 	dbselectarea('ZZZ')
-	ZZZ->( dbSetOrder( 1 ) )
+	ZZZ->( dbSetOrder( 2 ) ) // ZZZ_FILIAL+ZZZ_CDNECT+ZZZ_CDPROT
+
+	dbSelectArea( 'SB1' )
+	SB1->( dbSetOrder( 1 ) )
+
+	dbSelectArea( 'SB2' )
+	SB2->( dbSetOrder( 1 ) )
 
 	ZZY->( DbGoTop() )
 
@@ -199,22 +207,35 @@ user function XINC410()
 
 			aAdd( aSC6, jsonObject():new() )
 
-			aTail( aSc6 )['PRODUTO']              := posicione( 'ZZZ', 2, xFilial( 'ZZZ' ) + ZZY->ZZY_PRODUT, 'ZZZ_CDPROT' )
-			aTail( aSc6 )['QUANTIDADE']           := ZZY->ZZY_QTDPRD
-			aTail( aSc6 )['VALOR_UNITARIO']       := ZZY->ZZY_VLUNPD
-			aTail( aSc6 )['OPORTUNIDADE']         := ZZY->ZZY_CODIGO
+			if ZZZ->( msSeek( cSeekZZX := xFilial( 'ZZZ' ) + allTrim( ZZY->ZZY_PRODUT ) ) .And.;
+					cSeekZZX == ZZZ_FILIAL + allTrim( ZZZ_CDNECT ) )
+
+				if SB1->( msSeek( cSeekSA1 := xFilial( 'SA1' ) + allTrim( ZZZ->ZZZ_CDPROT ) ) .And.;
+						cSeekSA1 == B1_FILIAL + B1_COD )
+
+					aTail( aSc6 )['PRODUTO'          ] := SB1->B1_COD
+					aTail( aSc6 )['DESCRICAO_PRODUTO'] := SB1->B1_DESC
+					aTail( aSc6 )['TES_SAIDA'        ] := SB1->B1_TS
+					aTail( aSc6 )['ARMAZEM'          ] := SB1->B1_LOCPAD
+
+					if ! SB2->( msSeek( cSeekSB2 := xFilial( 'SB2' ) + SB1->( B1_COD + B1_LOCPAD ) ) .And.;
+							cSeekSB2 == B2_FILIAL + B2_COD + B2_LOCAL )
+
+						SB1->( CriaSB2( B1_COD, B1_LOCPAD ) ) // Gera Local de Estocagem do Produto
+
+					end if
+
+				end if
+
+			end if
+
+			aTail( aSc6 )['QUANTIDADE'          ] := ZZY->ZZY_QTDPRD
+			aTail( aSc6 )['VALOR_UNITARIO'      ] := ZZY->ZZY_VLUNPD
+			aTail( aSc6 )['VALOR_TOTAL'         ] := ZZY->( ZZY_QTDPRD * ZZY_VLUNPD )
+			aTail( aSc6 )['OPORTUNIDADE'        ] := ZZY->ZZY_CODIGO
 			aTail( aSc6 )['CLIENTE_OPORTUNIDADE'] := jSC5['CLIENTE']
-			aTail( aSc6 )['LOJA_OPORTUNIDADE']    := jSC5['LOJA']
-			aTail( aSc6 )['ITEM_OPORTUNIDADE']    := ZZY->ZZY_ITEM
-
-	/*TODO Definir no item do pedido os seguintes itens
-			descrição produto
-			valor total
-			tes saída
-			armazém
-			*/
-
-     //TODO armazém padrão
+			aTail( aSc6 )['LOJA_OPORTUNIDADE'   ] := jSC5['LOJA']
+			aTail( aSc6 )['ITEM_OPORTUNIDADE'   ] := ZZY->ZZY_ITEM
 
 		end if
 
@@ -309,3 +330,73 @@ user function viewZZY()
 
 return
 
+user function ExclZZY()
+
+	local cCommand := ''
+
+	if ZZY->ZZY_PEDGER
+
+		apMsgStop( 'Oportunidade com pedido já gerado.', 'Atenção !!!')
+
+	else
+
+		cCommand := " UPDATE " + retSqlName( 'ZZY' )
+		cCommand := " SET ZZY_COMENT = '" + setComnt() + "' "
+		cCommand := " WHERE ZZY_CODIGO = '" + ZZY->ZZY_CODIGO + "' "
+
+		if tcSqlExec(cCommand ) < 0
+
+			autoGrLog( 'Erro ao gravar no Banco de Dados: ' + CRLF + TCSQLError() )
+			mostraErro()
+
+		end if
+
+	end if
+
+return
+
+static function setComnt()
+
+	Local oComent
+	Local cComent := ZZY->ZZY_COMENT
+	Local oSBtnCanc
+	Local oSBtnOk
+	Static oDlg
+
+	DEFINE MSDIALOG oDlg TITLE "Comentário" FROM 000, 000  TO 200, 300 PIXEL
+
+	@ 002, 002 GET oComent VAR cComent OF oDlg MULTILINE SIZE 145, 080 HSCROLL PIXEL
+	DEFINE SBUTTON oSBtnOk FROM 085, 002 TYPE 01 OF oDlg ENABLE
+	DEFINE SBUTTON oSBtnCanc FROM 085, 030 TYPE 02 OF oDlg ENABLE
+
+	ACTIVATE MSDIALOG oDlg CENTERED
+
+Return cComent
+
+user function ComntZZY()
+
+	local cCommand := ''
+
+	if ZZY->ZZY_PEDGER
+
+		apMsgStop( 'Oportunidade com pedido já gerado.', 'Atenção !!!')
+
+	else
+
+		cCommand := " DELETE " + retSqlName( 'ZZY' )
+		cCommand := " WHERE ZZY_CODIGO = '" + ZZY->ZZY_CODIGO + "' "
+
+		if tcSqlExec(cCommand ) < 0
+
+			autoGrLog( 'Erro ao gravar no Banco de Dados: ' + CRLF + TCSQLError() )
+			mostraErro()
+
+		else
+
+			apMsgInfo( 'Oportunidade excluída com sucesso.', 'Atenção !!!' )
+
+		end if
+
+	end if
+
+return
