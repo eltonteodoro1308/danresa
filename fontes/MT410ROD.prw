@@ -24,7 +24,7 @@ user function MT410ROD()
 
 		M->C5_CLIENTE := jSC5['CLIENTE']
 		M->C5_LOJACLI := jSC5['LOJA']
-		M->C5_TIPO    := jSC5['TIPO'] 
+		M->C5_TIPOCLI := jSC5['TIPO'] 
 		M->C5_CONDPAG := jSC5['CONDPAG'] 
 		M->C5_NATUREZ := jSC5['NATUREZA']
 

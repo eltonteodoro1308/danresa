@@ -143,6 +143,7 @@ user function XINC410()
 	Local lIndireta := .T.
 	Local cSeekZZX  := ''
 	Local cSeekSA1  := ''
+	Local cSeekSB2  := ''
 
 	Private jSC5   := jsonObject():new()
 	Private aSC6   := {}
@@ -165,41 +166,43 @@ user function XINC410()
 	dbSelectArea( 'SB2' )
 	SB2->( dbSetOrder( 1 ) )
 
+	dbSelectArea( 'SA1' )
+	SA1->( dbSetOrder( 3 ) )
+
 	ZZY->( DbGoTop() )
 
 	do while ZZY->( ! eof() )
 
-		if _oBrowseUp:isMark( _oBrowseUp:Mark() )
+		if ! ZZY->( ZZY_PRDCMP .And. ZZY_CLICMP )
+
+			apMsgStop( 'Para gerar o pedido de venda cliente(s) e/ou produto(s) precisam estar compatibilizados.',;
+				'Atenção !!!' )
 
 			aSize( _aLstOport, 0 )
 
-			if empty( nPos := aScan( aLstOp, ZZY->ZZY_CODIGO ) )
+			exit
+
+		end if
+
+		if _oBrowseUp:isMark( _oBrowseUp:Mark() )
+
+			if empty( nPos := aScan( _aLstOport, ZZY->ZZY_CODIGO ) )
 
 				aAdd( _aLstOport, ZZY->ZZY_CODIGO )
 
 			end if
 
-			if empty( jSC5['CLIENTE'] )
+			if ZZX->( msSeek( cSeekZZX := xFilial( 'ZZX' ) + allTrim( ZZY->ZZY_CLIENT ) ) .And.;
+					cSeekZZX == ZZX_FILIAL + allTrim( ZZX_ID ) )
 
-				dbSelectArea( 'ZZX' )
-				ZZX->( dbSetOrder( 3 ) )
+				if SA1->( msSeek( cSeekSA1 := xFilial( 'SA1' ) + allTrim( ZZX->( ZZX_CPF + ZZX_CNPJ ) ) ) .And.;
+						cSeekSA1 == A1_FILIAL + A1_CGC )
 
-				if ZZX->( msSeek( cSeekZZX := xFilial( 'ZZX' ) + allTrim( ZZY->ZZY_CLIENT ) ) .And.;
-						cSeekZZX == ZZX_FILIAL + ZZX_ID )
-
-					dbSelectArea( 'SA1' )
-					SA1->( dbSetOrder( 3 ) )
-
-					if SA1->( msSeek( cSeekSA1 := xFilial( 'SA1' ) + allTrim( ZZX->( ZZX_CPF + ZZX_CNPJ ) ) ) .And.;
-							cSeekSA1 == A1_FILIAL + A1_CGC )
-
-						jSC5['CLIENTE']  := SA1->A1_COD
-						jSC5['LOJA']     := SA1->A1_LOJA
-						jSC5['TIPO']     := SA1->A1_TIPO
-						jSC5['CONDPAG']  := SA1->A1_COND
-						jSC5['NATUREZA'] := SA1->A1_NATUREZ
-
-					end if
+					jSC5['CLIENTE']  := SA1->A1_COD
+					jSC5['LOJA']     := SA1->A1_LOJA
+					jSC5['TIPO']     := SA1->A1_TIPO
+					jSC5['CONDPAG']  := SA1->A1_COND
+					jSC5['NATUREZA'] := SA1->A1_NATUREZ
 
 				end if
 
@@ -243,22 +246,42 @@ user function XINC410()
 
 	end do
 
+	if len( _aLstOport ) == 0 //Nenhuma Oportunidade Marcada
+
+		return
+
+	end if
+
+
 	if len( _aLstOport ) == 1
 
 		lIndireta := aviso( 'Tipo de Venda', 'Informe o tipo de venda', { 'Direta', 'indireta' }, 3 ) == 2
 
 	end if
 
-	if lIndireta
+	if lIndireta .And. pergunte( 'NECINDIRET')
 
-		pergunte( 'NECINDIRET')
+		SA1->( dbSetOrder( 1 ) )
 
-		jSC5['CLIENTE'] := MV_PAR01
-		jSC5['LOJA']    := MV_PAR02
+		if SA1->( msSeek( cSeekSA1 := xFilial( 'SA1' ) + MV_PAR01 + MV_PAR02 ) .And.;
+				cSeekSA1 == A1_FILIAL + A1_COD + A1_LOJA )
+
+			jSC5['CLIENTE']  := SA1->A1_COD
+			jSC5['LOJA']     := SA1->A1_LOJA
+			jSC5['TIPO']     := SA1->A1_TIPO
+			jSC5['CONDPAG']  := SA1->A1_COND
+			jSC5['NATUREZA'] := SA1->A1_NATUREZ
+
+		else
+
+			apMsgStop( 'Cliente inválido, processo interrompido !!!', 'Atenção !!!' )
+
+		end if
 
 		for nPos := 1 to len( aSc6 )
 
 			aSc6[ nPos ][ 'VALOR_UNITARIO' ] *= ( MV_PAR03/100 )
+			aSc6[ nPos ][ 'VALOR_TOTAL'    ] := aSc6[ nPos ][ 'VALOR_UNITARIO' ] * aSc6[ nPos ][ 'QUANTIDADE' ]
 
 		next nPos
 
@@ -330,7 +353,7 @@ user function viewZZY()
 
 return
 
-user function ExclZZY()
+user function ComntZZY()
 
 	local cCommand := ''
 
@@ -341,8 +364,8 @@ user function ExclZZY()
 	else
 
 		cCommand := " UPDATE " + retSqlName( 'ZZY' )
-		cCommand := " SET ZZY_COMENT = '" + setComnt() + "' "
-		cCommand := " WHERE ZZY_CODIGO = '" + ZZY->ZZY_CODIGO + "' "
+		cCommand += " SET ZZY_COMENT = '" + setComnt() + "' "
+		cCommand += " WHERE ZZY_CODIGO = '" + ZZY->ZZY_CODIGO + "' "
 
 		if tcSqlExec(cCommand ) < 0
 
@@ -359,21 +382,21 @@ static function setComnt()
 
 	Local oComent
 	Local cComent := ZZY->ZZY_COMENT
-	Local oSBtnCanc
+	// Local oSBtnCanc
 	Local oSBtnOk
 	Static oDlg
 
 	DEFINE MSDIALOG oDlg TITLE "Comentário" FROM 000, 000  TO 200, 300 PIXEL
 
 	@ 002, 002 GET oComent VAR cComent OF oDlg MULTILINE SIZE 145, 080 HSCROLL PIXEL
-	DEFINE SBUTTON oSBtnOk FROM 085, 002 TYPE 01 OF oDlg ENABLE
-	DEFINE SBUTTON oSBtnCanc FROM 085, 030 TYPE 02 OF oDlg ENABLE
+	DEFINE SBUTTON oSBtnOk FROM 085, 002 TYPE 01 OF oDlg ENABLE ACTION oDlg:end()
+	// DEFINE SBUTTON oSBtnCanc FROM 085, 030 TYPE 02 OF oDlg ENABLE
 
 	ACTIVATE MSDIALOG oDlg CENTERED
 
-Return cComent
+Return cComent + chr(13) + chr(10)
 
-user function ComntZZY()
+user function ExclZZY()
 
 	local cCommand := ''
 
@@ -384,7 +407,7 @@ user function ComntZZY()
 	else
 
 		cCommand := " DELETE " + retSqlName( 'ZZY' )
-		cCommand := " WHERE ZZY_CODIGO = '" + ZZY->ZZY_CODIGO + "' "
+		cCommand += " WHERE ZZY_CODIGO = '" + ZZY->ZZY_CODIGO + "' "
 
 		if tcSqlExec(cCommand ) < 0
 

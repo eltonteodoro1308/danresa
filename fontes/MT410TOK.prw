@@ -27,7 +27,7 @@ User Function MT410TOK()
 
 		// Marcar Oportunidade como pedido gerado
 		cCommand := " UPDATE " + retSqlName( 'ZZY' )
-		cCommand += " SET ZZY_PEDGER = 'T' "
+		cCommand += " SET ZZY_PEDGER = 'T', ZZY_OK = ' ' "
 		cCommand += " WHERE ZZY_CODIGO IN(" + cFormatIn + ")"
 
 		if tcSqlExec( cCommand ) < 0
