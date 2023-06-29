@@ -10,7 +10,7 @@ static function menudef()
 	aAdd( aRet, { 'Compatibilizar Produto'  , 'U_XINC010'  , 0, 8, 0,,, } )
 	aAdd( aRet, { 'Visualizar Oportunidade' , 'U_viewZZY'  , 0, 8, 0,,, } )
 	aAdd( aRet, { 'Excluir Oportunidade'    , 'U_ExclZZY'  , 0, 8, 0,,, } )
-	aAdd( aRet, { 'Incluir Comentário'      , 'U_ComntZZY' , 0, 8, 0,,, } )
+	aAdd( aRet, { 'Alterar Oportunidade'    , 'U_updatZZY' , 0, 8, 0,,, } )
 
 return aRet
 
@@ -173,18 +173,18 @@ user function XINC410()
 
 	do while ZZY->( ! eof() )
 
-		if ! ZZY->( ZZY_PRDCMP .And. ZZY_CLICMP )
-
-			apMsgStop( 'Para gerar o pedido de venda cliente(s) e/ou produto(s) precisam estar compatibilizados.',;
-				'Atenção !!!' )
-
-			aSize( _aLstOport, 0 )
-
-			exit
-
-		end if
-
 		if _oBrowseUp:isMark( _oBrowseUp:Mark() )
+
+			// if ! ZZY->( ZZY_PRDCMP .And. ZZY_CLICMP )
+
+			// 	apMsgStop( 'Para gerar o pedido de venda cliente(s) e/ou produto(s) precisam estar compatibilizados.',;
+			// 		'Atenção !!!' )
+
+			// 	aSize( _aLstOport, 0 )
+
+			// 	exit
+
+			// end if
 
 			if empty( nPos := aScan( _aLstOport, ZZY->ZZY_CODIGO ) )
 
@@ -353,9 +353,15 @@ user function viewZZY()
 
 return
 
-user function ComntZZY()
+user function updatZZY()
 
+	local aCampos := ZZY->( DBStruct() )
+	local nX      := 0
 	local cCommand := ''
+	local cField   := ''
+	local cValue   := ''
+
+	Private cCadastro := "Oportunidades"
 
 	if ZZY->ZZY_PEDGER
 
@@ -363,8 +369,29 @@ user function ComntZZY()
 
 	else
 
-		cCommand := " UPDATE " + retSqlName( 'ZZY' )
-		cCommand += " SET ZZY_COMENT = '" + setComnt() + "' "
+		AxAltera( 'ZZY', ZZY->( RecNo() ), 4 )
+
+		cCommand := " UPDATE " + retSqlName( 'ZZY' ) + " SET "
+
+		for nX := 1 to len( aCampos )
+
+			cField := aCampos[ nX, 1 ]
+			cValue := tranfValue( aCampos[ nX, 2 ], ZZY->(&cField) )
+
+			if ! allTrim( cField ) $ 'ZZY_FILIAL/ZZY_ID/ZZY_ITEM'
+
+				cCommand += " " + cField + " = " + cValue
+
+				if nX != len( aCampos )
+
+					cCommand += ", "
+
+				end if
+
+			end if
+
+		next nX
+
 		cCommand += " WHERE ZZY_CODIGO = '" + ZZY->ZZY_CODIGO + "' "
 
 		if tcSqlExec(cCommand ) < 0
@@ -378,23 +405,29 @@ user function ComntZZY()
 
 return
 
-static function setComnt()
+static function tranfValue( cType, xValue )
 
-	Local oComent
-	Local cComent := ZZY->ZZY_COMENT
-	// Local oSBtnCanc
-	Local oSBtnOk
-	Static oDlg
+	local cRet := ''
 
-	DEFINE MSDIALOG oDlg TITLE "Comentário" FROM 000, 000  TO 200, 300 PIXEL
+	if cType $ 'CM'
 
-	@ 002, 002 GET oComent VAR cComent OF oDlg MULTILINE SIZE 145, 080 HSCROLL PIXEL
-	DEFINE SBUTTON oSBtnOk FROM 085, 002 TYPE 01 OF oDlg ENABLE ACTION oDlg:end()
-	// DEFINE SBUTTON oSBtnCanc FROM 085, 030 TYPE 02 OF oDlg ENABLE
+		cRet := "'" + xValue + "'"
 
-	ACTIVATE MSDIALOG oDlg CENTERED
+	elseif cType == 'N'
 
-Return cComent + chr(13) + chr(10)
+		cRet := cValToChar( xValue )
+
+	elseif cType == 'D'
+
+		cRet := "'" + Dtos( xValue ) + "'"
+
+	elseif cType == 'L'
+
+		cRet := "'" + if( xValue, 'T', 'F' ) + "'"
+
+	end if
+
+return cRet
 
 user function ExclZZY()
 

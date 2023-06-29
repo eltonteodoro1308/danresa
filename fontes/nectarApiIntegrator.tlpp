@@ -1,5 +1,6 @@
 #include 'totvs.ch'
 #include 'tlpp-core.th'
+#include 'fwmvcdef.ch'
 
 user function testenectarApiIntegrator( )
 
@@ -61,12 +62,16 @@ return
 
 static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, cContentType )
 
-	local cId   := ''
-	local nX    := 1
-	local nY    := 1
-	local aArea := getArea()
-	local cSeek := ''
-	local lCliCmp := .T.
+	local cId           := ''
+	local nX            := 1
+	local nY            := 1
+	local aArea         := getArea()
+	local cSeek         := ''
+	local lCliCmp       := .T.
+	local oModel        := nil
+	local aErro         := {}
+
+	private jOportunidadeCamposPersonalizados := jsonObject():new()
 
 	if cHttpCode == '200'
 
@@ -93,64 +98,151 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 
 				for nY := 1 to len( aOportunidades[ nX ]['produtos'] )
 
-					recLock( 'ZZY', .T. )
+					jOportunidadeCamposPersonalizados:fromJson( upper( aOportunidades[ nX ]['camposPersonalizados']:toJson() ) ) 
 
-					ZZY->ZZY_FILIAL := xFilial( 'ZZY' )
-					ZZY->ZZY_AUTOR  := aOportunidades[ nX ]['autor']['nome']
-					ZZY->ZZY_AUTATU := aOportunidades[ nX ]['autorAtualizacao']['nome']
-					ZZY->ZZY_CLIENT := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
-					ZZY->ZZY_CONTAT := ''
-					ZZY->ZZY_CODIGO := aOportunidades[ nX ]['codigo']
-					ZZY->ZZY_DTATUA := FwDateTimeToLocal( aOportunidades[ nX ]['dataAtualizacao'] + '-03:00', 0 )[ 1 ]
-					ZZY->ZZY_DTCRIA := FwDateTimeToLocal( aOportunidades[ nX ]['dataCriacao'] + '-03:00', 0 )[ 1 ]
-					ZZY->ZZY_DTLIM  := FwDateTimeToLocal( aOportunidades[ nX ]['dataLimite'] + '-03:00', 0 )[ 1 ]
-					ZZY->ZZY_ETAPA  := cValTochar( aOportunidades[ nX ]['etapa'] )
-					ZZY->ZZY_ID    	:= cValToChar( aOportunidades[ nX ]['id'] )
-					ZZY->ZZY_PRORRO	:= .F.
-					ZZY->ZZY_JUSTIF := ''
-					ZZY->ZZY_NOME   := aOportunidades[ nX ]['cliente']['nome']
-					ZZY->ZZY_OBSERV	:= ''
-					ZZY->ZZY_ORIGEM := ''
-					ZZY->ZZY_PIPELI	:= aOportunidades[ nX ]['pipeline']
-					ZZY->ZZY_FUNILV := aOportunidades[ nX ]['funilVenda']['nome']
-					ZZY->ZZY_PROBAB	:= cValTochar( aOportunidades[ nX ]['probabilidade'] )
-					ZZY->ZZY_ITEM   := strZero( nY, tamSx3('ZZY_ITEM')[1] )
-					ZZY->ZZY_PRODUT := aOportunidades[ nX ]['produtos'][nY]['codigo']
-					ZZY->ZZY_QTDPRD := aOportunidades[ nX ]['produtos'][nY]['quantidade']
-					ZZY->ZZY_VLUNPD := aOportunidades[ nX ]['produtos'][nY]['valorUnitario']
-					ZZY->ZZY_VLTLPD := aOportunidades[ nX ]['produtos'][nY]['valorTotal']
-					ZZY->ZZY_RESPON := aOportunidades[ nX ]['responsavel']['nome']
-					ZZY->ZZY_STATUS := cValToChar( aOportunidades[ nX ]['status'] )
-					ZZY->ZZY_TEMPER := aOportunidades[ nX ]['temperatura']
-					ZZY->ZZY_VLRAVS := aOportunidades[ nX ]['valorAvulso']
-					ZZY->ZZY_VLRMES := aOportunidades[ nX ]['valorMensal']
-					ZZY->ZZY_VLRTOT := aOportunidades[ nX ]['valorTotal']
-					ZZY->ZZY_VLTDSC := aOportunidades[ nX ]['valorTotalDescontos']
-					ZZY->ZZY_COMPRO := aOportunidades[ nX ]['compromissos']
-					ZZY->ZZY_TAREFA := aOportunidades[ nX ]['tarefas']
-					ZZY->ZZY_BLQPRO := .F.
-					ZZY->ZZY_BLQCON := .F.
-					ZZY->ZZY_CORRES := ''
-					ZZY->ZZY_EQCORR := ''
-					ZZY->ZZY_MTDESC := ''
-					ZZY->ZZY_VNDBAS := .F.
-					ZZY->ZZY_PEDGER := .F.
-					ZZY->ZZY_CLICMP := lCliCmp
+					oModel := FWLoadModel( 'MODELZZY' )
+					oModel:SetOperation( MODEL_OPERATION_INSERT )
 
-					// Verifica se já há amarrração do produto Protheus com produto Nectar
-					dbSelectArea( 'ZZZ' )
-					SA1->( dbSetOrder( 2 ) )
+					if oModel:Activate()
 
-					cSeek := xFilial( 'ZZZ' ) + cValToChar( aOportunidades[ nX ]['produtos'][nY]['codigo'] )
+						oModel:loadValue( 'MASTER', 'ZZY_FILIAL', xFilial( 'ZZY' ) )
+						oModel:loadValue( 'MASTER', 'ZZY_AUTOR' , aOportunidades[ nX ]['autor']['nome'] )
+						oModel:loadValue( 'MASTER', 'ZZY_AUTATU', aOportunidades[ nX ]['autorAtualizacao']['nome'] )
+						oModel:loadValue( 'MASTER', 'ZZY_CLIENT', cValToChar( aOportunidades[ nX ]['cliente']['id'] ) )
+						oModel:loadValue( 'MASTER', 'ZZY_CONTAT', '' )
+						oModel:loadValue( 'MASTER', 'ZZY_CODIGO', aOportunidades[ nX ]['codigo'] )
+						oModel:loadValue( 'MASTER', 'ZZY_DTATUA', FwDateTimeToLocal( aOportunidades[ nX ]['dataAtualizacao'] + '-03:00', 0 )[ 1 ] )
+						oModel:loadValue( 'MASTER', 'ZZY_DTCRIA', FwDateTimeToLocal( aOportunidades[ nX ]['dataCriacao'] + '-03:00', 0 )[ 1 ] )
+						oModel:loadValue( 'MASTER', 'ZZY_DTLIM' , FwDateTimeToLocal( aOportunidades[ nX ]['dataLimite'] + '-03:00', 0 )[ 1 ] )
+						oModel:loadValue( 'MASTER', 'ZZY_ETAPA' , cValTochar( aOportunidades[ nX ]['etapa'] ) )
+						oModel:loadValue( 'MASTER', 'ZZY_ID'    , cValToChar( aOportunidades[ nX ]['id'] ) )
+						oModel:loadValue( 'MASTER', 'ZZY_PRORRO', .F. )
+						oModel:loadValue( 'MASTER', 'ZZY_JUSTIF', '' )
+						oModel:loadValue( 'MASTER', 'ZZY_NOME'  , aOportunidades[ nX ]['cliente']['nome'] )
+						oModel:loadValue( 'MASTER', 'ZZY_OBSERV', '' )
+						oModel:loadValue( 'MASTER', 'ZZY_ORIGEM', '' )
+						oModel:loadValue( 'MASTER', 'ZZY_PIPELI', aOportunidades[ nX ]['pipeline'] )
+						oModel:loadValue( 'MASTER', 'ZZY_FUNILV', aOportunidades[ nX ]['funilVenda']['nome'] )
+						oModel:loadValue( 'MASTER', 'ZZY_PROBAB', cValTochar( aOportunidades[ nX ]['probabilidade'] ) )
+						oModel:loadValue( 'MASTER', 'ZZY_ITEM'  , strZero( nY, tamSx3('ZZY_ITEM')[1] ) )
+						oModel:loadValue( 'MASTER', 'ZZY_PRODUT', aOportunidades[ nX ]['produtos'][nY]['codigo'] )
+						oModel:loadValue( 'MASTER', 'ZZY_QTDPRD', aOportunidades[ nX ]['produtos'][nY]['quantidade'] )
+						oModel:loadValue( 'MASTER', 'ZZY_VLUNPD', aOportunidades[ nX ]['produtos'][nY]['valorUnitario'] )
+						oModel:loadValue( 'MASTER', 'ZZY_VLTLPD', aOportunidades[ nX ]['produtos'][nY]['valorTotal'] )
+						oModel:loadValue( 'MASTER', 'ZZY_RESPON', aOportunidades[ nX ]['responsavel']['nome'] )
+						oModel:loadValue( 'MASTER', 'ZZY_STATUS', cValToChar( aOportunidades[ nX ]['status'] ) )
+						oModel:loadValue( 'MASTER', 'ZZY_TEMPER', aOportunidades[ nX ]['temperatura'] )
+						oModel:loadValue( 'MASTER', 'ZZY_VLRAVS', aOportunidades[ nX ]['valorAvulso'] )
+						oModel:loadValue( 'MASTER', 'ZZY_VLRMES', aOportunidades[ nX ]['valorMensal'] )
+						oModel:loadValue( 'MASTER', 'ZZY_VLRTOT', aOportunidades[ nX ]['valorTotal'] )
+						oModel:loadValue( 'MASTER', 'ZZY_VLTDSC', aOportunidades[ nX ]['valorTotalDescontos'] )
+						oModel:loadValue( 'MASTER', 'ZZY_COMPRO', aOportunidades[ nX ]['compromissos'] )
+						oModel:loadValue( 'MASTER', 'ZZY_TAREFA', aOportunidades[ nX ]['tarefas'] )
+						oModel:loadValue( 'MASTER', 'ZZY_BLQPRO', .F. )
+						oModel:loadValue( 'MASTER', 'ZZY_BLQCON', .F. )
+						oModel:loadValue( 'MASTER', 'ZZY_CORRES', '' )
+						oModel:loadValue( 'MASTER', 'ZZY_EQCORR', '' )
+						oModel:loadValue( 'MASTER', 'ZZY_MTDESC', '' )
+						oModel:loadValue( 'MASTER', 'ZZY_VNDBAS', .F. )
+						oModel:loadValue( 'MASTER', 'ZZY_PEDGER', .F. )
+						oModel:loadValue( 'MASTER', 'ZZY_CLICMP', lCliCmp )
 
-					ZZY->ZZY_PRDCMP := ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ZZZ_CDNECT )
+						// Verifica se já há amarrração do produto Protheus com produto Nectar
+						dbSelectArea( 'ZZZ' )
+						SA1->( dbSetOrder( 2 ) )
 
-					ZZY->ZZY_IDCLI  := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
-					ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
+						cSeek := xFilial( 'ZZZ' ) + cValToChar( aOportunidades[ nX ]['produtos'][nY]['codigo'] )
 
-					ZZY->( msUnlock() )
+						oModel:loadValue( 'MASTER', 'ZZY_PRDCMP', ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ZZZ_CDNECT ) )
+
+						oModel:loadValue( 'MASTER', 'ZZY_IDCLI', cValToChar( aOportunidades[ nX ]['cliente']['id'] ) )
+						oModel:loadValue( 'MASTER', 'ZZY_JSON', aOportunidades[ nX ]:toJson() )
+
+						If oModel:VldData()
+
+							oModel:CommitData()
+
+						else
+
+							aErro := oModel:GetErrorMessage()
+
+							conOut( "Id do formulário de origem:" + ' [' + cValToChar( aErro[1]  ) + ']' )
+							conOut( "Id do campo de origem:     " + ' [' + cValToChar( aErro[2]  ) + ']' )
+							conOut( "Id do formulário de erro:  " + ' [' + cValToChar( aErro[3]  ) + ']' )
+							conOut( "Id do campo de erro:       " + ' [' + cValToChar( aErro[4]  ) + ']' )
+							conOut( "Id do erro:                " + ' [' + cValToChar( aErro[5]  ) + ']' )
+							conOut( "Mensagem do erro:          " + ' [' + cValToChar( aErro[6]  ) + ']' )
+							conOut( "Mensagem da solução:       " + ' [' + cValToChar( aErro[7]  ) + ']' )
+							conOut( "Valor atribuido:           " + ' [' + cValToChar( aErro[8]  ) + ']' )
+							conOut( "Valor anterior:            " + ' [' + cValToChar( aErro[9]  ) + ']' )
+
+						EndIf
+
+					end if
+
+					oModel:DeActivate()
+
+					FreeObj( oModel )
 
 					buscaProduto( cValToChar( aOportunidades[ nX ]['produtos'][nY]['produto']['id'] ) )
+
+					// recLock( 'ZZY', .T. )
+
+					// ZZY->ZZY_FILIAL := xFilial( 'ZZY' )
+					// ZZY->ZZY_AUTOR  := aOportunidades[ nX ]['autor']['nome']
+					// ZZY->ZZY_AUTATU := aOportunidades[ nX ]['autorAtualizacao']['nome']
+					// ZZY->ZZY_CLIENT := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
+					// ZZY->ZZY_CONTAT := ''
+					// ZZY->ZZY_CODIGO := aOportunidades[ nX ]['codigo']
+					// ZZY->ZZY_DTATUA := FwDateTimeToLocal( aOportunidades[ nX ]['dataAtualizacao'] + '-03:00', 0 )[ 1 ]
+					// ZZY->ZZY_DTCRIA := FwDateTimeToLocal( aOportunidades[ nX ]['dataCriacao'] + '-03:00', 0 )[ 1 ]
+					// ZZY->ZZY_DTLIM  := FwDateTimeToLocal( aOportunidades[ nX ]['dataLimite'] + '-03:00', 0 )[ 1 ]
+					// ZZY->ZZY_ETAPA  := cValTochar( aOportunidades[ nX ]['etapa'] )
+					// ZZY->ZZY_ID    	:= cValToChar( aOportunidades[ nX ]['id'] )
+					// ZZY->ZZY_PRORRO	:= .F.
+					// ZZY->ZZY_JUSTIF := ''
+					// ZZY->ZZY_NOME   := aOportunidades[ nX ]['cliente']['nome']
+					// ZZY->ZZY_OBSERV	:= ''
+					// ZZY->ZZY_ORIGEM := ''
+					// ZZY->ZZY_PIPELI	:= aOportunidades[ nX ]['pipeline']
+					// ZZY->ZZY_FUNILV := aOportunidades[ nX ]['funilVenda']['nome']
+					// ZZY->ZZY_PROBAB	:= cValTochar( aOportunidades[ nX ]['probabilidade'] )
+					// ZZY->ZZY_ITEM   := strZero( nY, tamSx3('ZZY_ITEM')[1] )
+					// ZZY->ZZY_PRODUT := aOportunidades[ nX ]['produtos'][nY]['codigo']
+					// ZZY->ZZY_QTDPRD := aOportunidades[ nX ]['produtos'][nY]['quantidade']
+					// ZZY->ZZY_VLUNPD := aOportunidades[ nX ]['produtos'][nY]['valorUnitario']
+					// ZZY->ZZY_VLTLPD := aOportunidades[ nX ]['produtos'][nY]['valorTotal']
+					// ZZY->ZZY_RESPON := aOportunidades[ nX ]['responsavel']['nome']
+					// ZZY->ZZY_STATUS := cValToChar( aOportunidades[ nX ]['status'] )
+					// ZZY->ZZY_TEMPER := aOportunidades[ nX ]['temperatura']
+					// ZZY->ZZY_VLRAVS := aOportunidades[ nX ]['valorAvulso']
+					// ZZY->ZZY_VLRMES := aOportunidades[ nX ]['valorMensal']
+					// ZZY->ZZY_VLRTOT := aOportunidades[ nX ]['valorTotal']
+					// ZZY->ZZY_VLTDSC := aOportunidades[ nX ]['valorTotalDescontos']
+					// ZZY->ZZY_COMPRO := aOportunidades[ nX ]['compromissos']
+					// ZZY->ZZY_TAREFA := aOportunidades[ nX ]['tarefas']
+					// ZZY->ZZY_BLQPRO := .F.
+					// ZZY->ZZY_BLQCON := .F.
+					// ZZY->ZZY_CORRES := ''
+					// ZZY->ZZY_EQCORR := ''
+					// ZZY->ZZY_MTDESC := ''
+					// ZZY->ZZY_VNDBAS := .F.
+					// ZZY->ZZY_PEDGER := .F.
+					// ZZY->ZZY_CLICMP := lCliCmp
+
+					// // Verifica se já há amarrração do produto Protheus com produto Nectar
+					// dbSelectArea( 'ZZZ' )
+					// SA1->( dbSetOrder( 2 ) )
+
+					// cSeek := xFilial( 'ZZZ' ) + cValToChar( aOportunidades[ nX ]['produtos'][nY]['codigo'] )
+
+					// ZZY->ZZY_PRDCMP := ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ZZZ_CDNECT )
+
+					// ZZY->ZZY_IDCLI  := cValToChar( aOportunidades[ nX ]['cliente']['id'] )
+					// ZZY->ZZY_JSON   := aOportunidades[ nX ]:toJson()
+
+					// ZZY->( msUnlock() )
+
 
 				next nY
 
@@ -189,11 +281,17 @@ return
 static function gravaContato( cHeaderRet, uResponse, uJsonXml, cHttpCode, cContentType )
 
 	local cId    := ''
+	local oModel := nil
+	local aErro  := {}
 	local jContato := jsonObject():new()
+
+	private jContatoCamposPersonalizados := jsonObject():new()
 
 	if cHttpCode == '200'
 
 		jContato:fromJson( DecodeUtf8( uResponse ) )
+
+		jContatoCamposPersonalizados:fromJson( upper( jContato['camposPersonalizados']:toJson() ) ) 
 
 		cId := cValToChar( jContato['id'] )
 
@@ -203,52 +301,125 @@ static function gravaContato( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 
 		if ! ZZX->( msSeek( xFilial( 'ZZX' ) + cId ) )
 
-			recLock( 'ZZX', .T. )
+			oModel := FWLoadModel( 'MODELZZX' )
+			oModel:SetOperation( MODEL_OPERATION_INSERT )
 
-			ZZX->ZZX_FILIAL := xFilial( 'ZZX' )
-			ZZX->ZZX_ATIVO  := jContato['ativo']
-			ZZX->ZZX_AUTOR  := jContato['autor']['nome']
-			ZZX->ZZX_AUTATU := jContato['autorAtualizacao']['nome']
-			ZZX->ZZX_CATEGO := jContato['categoria']
-			ZZX->ZZX_CNPJ   := cValToChar( jContato['cnpj'] )
-			ZZX->ZZX_CODIGO := ''
-			ZZX->ZZX_CPF    := cValToChar( jContato['cpf'] )
-			ZZX->ZZX_CONSTA := cValToChar( jContato['constante'] )
-			ZZX->ZZX_CONTAT := ''
-			ZZX->ZZX_CNTPAI := ''
-			ZZX->ZZX_DATATU := FwDateTimeToLocal( jContato['dataAtualizacao'] + '-03:00', 0 )[ 1 ]
-			ZZX->ZZX_DTCRIA := FwDateTimeToLocal( jContato['dataCriacao'] + '-03:00', 0 )[ 1 ]
-			ZZX->ZZX_EMAILS := jContato['emails'][1]
-			ZZX->ZZX_EMPRES := jContato['empresa']
-			ZZX->ZZX_EMPATU := ''
-			ZZX->ZZX_ENDERE := jContato['enderecos'][1]:toJson()
-			ZZX->ZZX_FACEBO := ''
-			ZZX->ZZX_ID     := cValToChar( jContato['id'] )
-			ZZX->ZZX_INDPOR := ''
-			ZZX->ZZX_LINKED := ''
-			ZZX->ZZX_LISTA  := ''
-			ZZX->ZZX_LISTAS := ''
-			ZZX->ZZX_NOME   := jContato['nome']
-			ZZX->ZZX_OBSERV := ''
-			ZZX->ZZX_ORIGEM := ''
-			ZZX->ZZX_RAZSOC := ''
-			ZZX->ZZX_RECANU := ''
-			ZZX->ZZX_RESPON := jContato['responsavel']['nome']
-			ZZX->ZZX_SEGMEN := ''
-			ZZX->ZZX_SIGILO := .F.
-			ZZX->ZZX_SITE   := ''
-			ZZX->ZZX_SKYPE  := ''
-			ZZX->ZZX_TELEFO := jContato['telefone']
-			ZZX->ZZX_TWITER := ''
-			ZZX->ZZX_COMPRO := jContato['compromissos']
-			ZZX->ZZX_OPORTU := jContato['oportunidades']
-			ZZX->ZZX_TAREFA := jContato['tarefa']
-			ZZX->ZZX_RGPAIS := jContato['regiaoPais']['nome']
-			ZZX->ZZX_RGESTD := jContato['regiaoEstado']['sigla']
-			ZZX->ZZX_RGMUNC := jContato['regiaoMunicipio']['nome']
-			ZZX->ZZX_JSON   := jContato:toJson()
+			if oModel:Activate()
 
-			ZZX->( msUnlock() )
+				oModel:loadValue( 'MASTER', 'ZZX_FILIAL', xFilial( 'ZZX' ) )
+				oModel:loadValue( 'MASTER', 'ZZX_ATIVO' , jContato['ativo'] )
+				oModel:loadValue( 'MASTER', 'ZZX_AUTOR' , jContato['autor']['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZX_AUTATU', jContato['autorAtualizacao']['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZX_CATEGO', cValToChar( jContato['categoria'] ) )
+				oModel:loadValue( 'MASTER', 'ZZX_CNPJ'  , cValToChar( jContato['cnpj'] ) )
+				oModel:loadValue( 'MASTER', 'ZZX_CODIGO', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_CPF'   , cValToChar( jContato['cpf'] ) )
+				oModel:loadValue( 'MASTER', 'ZZX_CONSTA', cValToChar( cValToChar( jContato['constante'] ) ) )
+				oModel:loadValue( 'MASTER', 'ZZX_CONTAT', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_CNTPAI', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_DATATU', FwDateTimeToLocal( jContato['dataAtualizacao'] + '-03:00', 0 )[ 1 ] )
+				oModel:loadValue( 'MASTER', 'ZZX_DTCRIA', FwDateTimeToLocal( jContato['dataCriacao'] + '-03:00', 0 )[ 1 ] )
+				oModel:loadValue( 'MASTER', 'ZZX_EMAILS', jContato['emails'][1] )
+				oModel:loadValue( 'MASTER', 'ZZX_EMPRES', jContato['empresa'] )
+				oModel:loadValue( 'MASTER', 'ZZX_EMPATU', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_ENDERE', jContato['enderecos'][1]:toJson() )
+				oModel:loadValue( 'MASTER', 'ZZX_FACEBO', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_ID'    , cValToChar( jContato['id'] ) )
+				oModel:loadValue( 'MASTER', 'ZZX_INDPOR', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_LINKED', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_LISTA' , '' )
+				oModel:loadValue( 'MASTER', 'ZZX_LISTAS', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_NOME'  , jContato['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZX_OBSERV', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_ORIGEM', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_RAZSOC', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_RECANU', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_RESPON', jContato['responsavel']['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZX_SEGMEN', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_SIGILO', .F. )
+				oModel:loadValue( 'MASTER', 'ZZX_SITE'  , '' )
+				oModel:loadValue( 'MASTER', 'ZZX_SKYPE' , '' )
+				oModel:loadValue( 'MASTER', 'ZZX_TELEFO', jContato['telefone'] )
+				oModel:loadValue( 'MASTER', 'ZZX_TWITER', '' )
+				oModel:loadValue( 'MASTER', 'ZZX_COMPRO', jContato['compromissos'] )
+				oModel:loadValue( 'MASTER', 'ZZX_OPORTU', jContato['oportunidades'] )
+				oModel:loadValue( 'MASTER', 'ZZX_TAREFA', jContato['tarefas'] )
+				oModel:loadValue( 'MASTER', 'ZZX_RGPAIS', jContato['regiaoPais']['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZX_RGESTD', jContato['regiaoEstado']['sigla'] )
+				oModel:loadValue( 'MASTER', 'ZZX_RGMUNC', jContato['regiaoMunicipio']['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZX_JSON'  , jContato:toJson() )
+
+				If lRet := oModel:VldData()
+
+					lRet := oModel:CommitData()
+
+				else
+
+					aErro := oModel:GetErrorMessage()
+
+					conOut( "Id do formulário de origem:" + ' [' + cValToChar( aErro[1]  ) + ']' )
+					conOut( "Id do campo de origem:     " + ' [' + cValToChar( aErro[2]  ) + ']' )
+					conOut( "Id do formulário de erro:  " + ' [' + cValToChar( aErro[3]  ) + ']' )
+					conOut( "Id do campo de erro:       " + ' [' + cValToChar( aErro[4]  ) + ']' )
+					conOut( "Id do erro:                " + ' [' + cValToChar( aErro[5]  ) + ']' )
+					conOut( "Mensagem do erro:          " + ' [' + cValToChar( aErro[6]  ) + ']' )
+					conOut( "Mensagem da solução:       " + ' [' + cValToChar( aErro[7]  ) + ']' )
+					conOut( "Valor atribuido:           " + ' [' + cValToChar( aErro[8]  ) + ']' )
+					conOut( "Valor anterior:            " + ' [' + cValToChar( aErro[9]  ) + ']' )
+
+				end if
+
+			end if
+
+			oModel:DeActivate()
+			FreeObj( oModel )
+
+			// recLock( 'ZZX', .T. )
+
+			// ZZX->ZZX_FILIAL := xFilial( 'ZZX' )
+			// ZZX->ZZX_ATIVO  := jContato['ativo']
+			// ZZX->ZZX_AUTOR  := jContato['autor']['nome']
+			// ZZX->ZZX_AUTATU := jContato['autorAtualizacao']['nome']
+			// ZZX->ZZX_CATEGO := jContato['categoria']
+			// ZZX->ZZX_CNPJ   := cValToChar( jContato['cnpj'] )
+			// ZZX->ZZX_CODIGO := ''
+			// ZZX->ZZX_CPF    := cValToChar( jContato['cpf'] )
+			// ZZX->ZZX_CONSTA := cValToChar( jContato['constante'] )
+			// ZZX->ZZX_CONTAT := ''
+			// ZZX->ZZX_CNTPAI := ''
+			// ZZX->ZZX_DATATU := FwDateTimeToLocal( jContato['dataAtualizacao'] + '-03:00', 0 )[ 1 ]
+			// ZZX->ZZX_DTCRIA := FwDateTimeToLocal( jContato['dataCriacao'] + '-03:00', 0 )[ 1 ]
+			// ZZX->ZZX_EMAILS := jContato['emails'][1]
+			// ZZX->ZZX_EMPRES := jContato['empresa']
+			// ZZX->ZZX_EMPATU := ''
+			// ZZX->ZZX_ENDERE := jContato['enderecos'][1]:toJson()
+			// ZZX->ZZX_FACEBO := ''
+			// ZZX->ZZX_ID     := cValToChar( jContato['id'] )
+			// ZZX->ZZX_INDPOR := ''
+			// ZZX->ZZX_LINKED := ''
+			// ZZX->ZZX_LISTA  := ''
+			// ZZX->ZZX_LISTAS := ''
+			// ZZX->ZZX_NOME   := jContato['nome']
+			// ZZX->ZZX_OBSERV := ''
+			// ZZX->ZZX_ORIGEM := ''
+			// ZZX->ZZX_RAZSOC := ''
+			// ZZX->ZZX_RECANU := ''
+			// ZZX->ZZX_RESPON := jContato['responsavel']['nome']
+			// ZZX->ZZX_SEGMEN := ''
+			// ZZX->ZZX_SIGILO := .F.
+			// ZZX->ZZX_SITE   := ''
+			// ZZX->ZZX_SKYPE  := ''
+			// ZZX->ZZX_TELEFO := jContato['telefone']
+			// ZZX->ZZX_TWITER := ''
+			// ZZX->ZZX_COMPRO := jContato['compromissos']
+			// ZZX->ZZX_OPORTU := jContato['oportunidades']
+			// ZZX->ZZX_TAREFA := jContato['tarefa']
+			// ZZX->ZZX_RGPAIS := jContato['regiaoPais']['nome']
+			// ZZX->ZZX_RGESTD := jContato['regiaoEstado']['sigla']
+			// ZZX->ZZX_RGMUNC := jContato['regiaoMunicipio']['nome']
+			// ZZX->ZZX_JSON   := jContato:toJson()
+
+			// ZZX->( msUnlock() )
 
 		end if
 
@@ -277,11 +448,17 @@ return
 static function gravaProduto( cHeaderRet, uResponse, uJsonXml, cHttpCode, cContentType )
 
 	local cId    := ''
+	local oModel := nil
+	local aErro  := {}
 	local jProduto := jsonObject():new()
+
+	private jProdutoCamposPersonalizados := jsonObject():new()
 
 	if cHttpCode == '200'
 
 		jProduto:fromJson( DecodeUtf8( uResponse ) )
+
+		jProdutoCamposPersonalizados:fromJson( upper( jProduto['camposPersonalizados']:toJson() ) ) 
 
 		cId := cValToChar( jProduto['id'] )
 
@@ -291,35 +468,91 @@ static function gravaProduto( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 
 		if ! ZZV->( msSeek( xFilial( 'ZZV' ) + cId ) )
 
-			recLock( 'ZZV', .T. )
+			oModel := FWLoadModel( 'MODELZZV' )
+			oModel:SetOperation( MODEL_OPERATION_INSERT )
 
-			ZZV->ZZV_FILIAL	:= xFilial( 'ZZV' )
-			ZZV->ZZV_ATIVO 	:= jProduto['ativo']
-			ZZV->ZZV_CATEGO	:= ''
-			ZZV->ZZV_CODIGO	:= jProduto['codigo']
-			ZZV->ZZV_COMISS	:= jProduto['comissao']
-			ZZV->ZZV_CONTAD	:= jProduto['contador']
-			ZZV->ZZV_DSCMAX	:= jProduto['descontoMaximo']
-			ZZV->ZZV_DESCRI	:= jProduto['nome']
-			ZZV->ZZV_EDPRDP	:= jProduto['editarProdutosDependentes']
-			ZZV->ZZV_ID    	:= cValToChar( jProduto['id'] )
-			ZZV->ZZV_COMPRC	:= jProduto['comissaoPorcentual']
-			ZZV->ZZV_DSCPRC	:= jProduto['descontoPorcentual']
-			ZZV->ZZV_MOEDA 	:= jProduto['moeda']
-			ZZV->ZZV_POSEST	:= jProduto['possuiEstoque']
-			ZZV->ZZV_PRDDEP	:= ''
-			ZZV->ZZV_QTDEST	:= 0
-			ZZV->ZZV_RECORR	:= cValToChar( jProduto['recorrencia'] )
-			ZZV->ZZV_SUBCAT	:= ''
-			ZZV->ZZV_VLRBAS	:= jProduto['valorBase']
-			ZZV->ZZV_VLREDT	:= jProduto['valorEditavel']
-			ZZV->ZZV_FRACIO	:= jProduto['fracionario']
-			ZZV->ZZV_ITCUST	:= ''
-			ZZV->ZZV_FXPREC	:= ''
-			ZZV->ZZV_VLBSCP	:= 0
-			ZZV->ZZV_JSON  	:= jProduto:toJson()
+			if oModel:Activate()
 
-			ZZV->( msUnlock() )
+				oModel:loadValue( 'MASTER', 'ZZV_FILIAL', xFilial( 'ZZV' ) )
+				oModel:loadValue( 'MASTER', 'ZZV_ATIVO' , jProduto['ativo'] )
+				oModel:loadValue( 'MASTER', 'ZZV_CATEGO', '' )
+				oModel:loadValue( 'MASTER', 'ZZV_CODIGO', jProduto['codigo'] )
+				oModel:loadValue( 'MASTER', 'ZZV_COMISS', jProduto['comissao'] )
+				oModel:loadValue( 'MASTER', 'ZZV_CONTAD', jProduto['contador'] )
+				oModel:loadValue( 'MASTER', 'ZZV_DSCMAX', jProduto['descontoMaximo'] )
+				oModel:loadValue( 'MASTER', 'ZZV_DESCRI', jProduto['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZV_EDPRDP', ! empty( jProduto['editarProdutosDependentes'] ) )
+				oModel:loadValue( 'MASTER', 'ZZV_ID'    , cValToChar( jProduto['id'] ) )
+				oModel:loadValue( 'MASTER', 'ZZV_COMPRC', jProduto['comissaoPorcentual'] )
+				oModel:loadValue( 'MASTER', 'ZZV_DSCPRC', jProduto['descontoPorcentual'] )
+				oModel:loadValue( 'MASTER', 'ZZV_MOEDA' , jProduto['moeda'] )
+				oModel:loadValue( 'MASTER', 'ZZV_POSEST', ! empty( jProduto['possuiEstoque'] ) )
+				oModel:loadValue( 'MASTER', 'ZZV_PRDDEP', '' )
+				oModel:loadValue( 'MASTER', 'ZZV_QTDEST', 0 )
+				oModel:loadValue( 'MASTER', 'ZZV_RECORR', cValToChar( jProduto['recorrencia'] ) )
+				oModel:loadValue( 'MASTER', 'ZZV_SUBCAT', '' )
+				oModel:loadValue( 'MASTER', 'ZZV_VLRBAS', jProduto['valorBase'] )
+				oModel:loadValue( 'MASTER', 'ZZV_VLREDT', jProduto['valorEditavel'] )
+				oModel:loadValue( 'MASTER', 'ZZV_FRACIO', ! empty( jProduto['fracionario'] ) )
+				oModel:loadValue( 'MASTER', 'ZZV_ITCUST', '' )
+				oModel:loadValue( 'MASTER', 'ZZV_FXPREC', '' )
+				oModel:loadValue( 'MASTER', 'ZZV_VLBSCP', 0 )
+				oModel:loadValue( 'MASTER', 'ZZV_JSON'  , jProduto:toJson() )
+
+				If lRet := oModel:VldData()
+
+					lRet := oModel:CommitData()
+
+				else
+
+					aErro := oModel:GetErrorMessage()
+
+					conOut( "Id do formulário de origem:" + ' [' + cValToChar( aErro[1]  ) + ']' )
+					conOut( "Id do campo de origem:     " + ' [' + cValToChar( aErro[2]  ) + ']' )
+					conOut( "Id do formulário de erro:  " + ' [' + cValToChar( aErro[3]  ) + ']' )
+					conOut( "Id do campo de erro:       " + ' [' + cValToChar( aErro[4]  ) + ']' )
+					conOut( "Id do erro:                " + ' [' + cValToChar( aErro[5]  ) + ']' )
+					conOut( "Mensagem do erro:          " + ' [' + cValToChar( aErro[6]  ) + ']' )
+					conOut( "Mensagem da solução:       " + ' [' + cValToChar( aErro[7]  ) + ']' )
+					conOut( "Valor atribuido:           " + ' [' + cValToChar( aErro[8]  ) + ']' )
+					conOut( "Valor anterior:            " + ' [' + cValToChar( aErro[9]  ) + ']' )
+
+				end if
+
+			end if
+
+			oModel:DeActivate()
+			FreeObj( oModel )
+
+			// recLock( 'ZZV', .T. )
+
+			// ZZV->ZZV_FILIAL	:= xFilial( 'ZZV' )
+			// ZZV->ZZV_ATIVO 	:= jProduto['ativo']
+			// ZZV->ZZV_CATEGO	:= ''
+			// ZZV->ZZV_CODIGO	:= jProduto['codigo']
+			// ZZV->ZZV_COMISS	:= jProduto['comissao']
+			// ZZV->ZZV_CONTAD	:= jProduto['contador']
+			// ZZV->ZZV_DSCMAX	:= jProduto['descontoMaximo']
+			// ZZV->ZZV_DESCRI	:= jProduto['nome']
+			// ZZV->ZZV_EDPRDP	:= jProduto['editarProdutosDependentes']
+			// ZZV->ZZV_ID    	:= cValToChar( jProduto['id'] )
+			// ZZV->ZZV_COMPRC	:= jProduto['comissaoPorcentual']
+			// ZZV->ZZV_DSCPRC	:= jProduto['descontoPorcentual']
+			// ZZV->ZZV_MOEDA 	:= jProduto['moeda']
+			// ZZV->ZZV_POSEST	:= jProduto['possuiEstoque']
+			// ZZV->ZZV_PRDDEP	:= ''
+			// ZZV->ZZV_QTDEST	:= 0
+			// ZZV->ZZV_RECORR	:= cValToChar( jProduto['recorrencia'] )
+			// ZZV->ZZV_SUBCAT	:= ''
+			// ZZV->ZZV_VLRBAS	:= jProduto['valorBase']
+			// ZZV->ZZV_VLREDT	:= jProduto['valorEditavel']
+			// ZZV->ZZV_FRACIO	:= jProduto['fracionario']
+			// ZZV->ZZV_ITCUST	:= ''
+			// ZZV->ZZV_FXPREC	:= ''
+			// ZZV->ZZV_VLBSCP	:= 0
+			// ZZV->ZZV_JSON  	:= jProduto:toJson()
+
+			// ZZV->( msUnlock() )
 
 		end if
 
