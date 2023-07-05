@@ -1,0 +1,68 @@
+#include 'totvs.ch'
+#include 'fwmvcdef.ch'
+#include 'tlpp-core.th'
+
+user function nectarGestaoVendas()
+
+	Local aCoors       := FWGetDialogSize( oMainWnd )
+	Local oDlgPrinc    := nil
+	Local oPanelUp     := nil
+	Local oPanelDown   := nil
+	Local oBrowseUp    := nil
+	Local oBrowseDown  := nil
+	Local oFWLayer     := FWLayer():New()
+	Local oBrwRelation := FWBrwRelation():New()
+
+	Define MsDialog oDlgPrinc Title 'Cockipt' From aCoors[1], aCoors[2] To aCoors[3], aCoors[4] Pixel
+
+	oFWLayer:Init( oDlgPrinc, .F., .T. )
+
+	oFWLayer:AddLine( 'UP', 50, .F. )
+	oFWLayer:AddCollumn( 'ALL', 100, .T., 'UP' )
+	oPanelUp := oFWLayer:GetColPanel( 'ALL', 'UP' )
+
+	oFWLayer:AddLine( 'DOWN', 50, .F. )
+	oFWLayer:AddCollumn( 'ALL' , 100, .T., 'DOWN' )
+	oPanelDown := oFWLayer:GetColPanel( 'ALL', 'DOWN' )
+
+	oBrowseUp := FWmBrowse():New()
+	oBrowseUp:SetOwner( oPanelUp )
+	oBrowseUp:SetDescription( 'Itens Pedido de Venda' )
+	oBrowseUp:SetAlias( 'SC6' )
+	oBrowseUp:SetFilterDefault( "!EMPTY(SC6->C6_XOPORTU)" )
+	oBrowseUp:DisableReport()
+
+	oBrowseUp:AddLegend( 'SC6->( C6_QTDENT == 0 )'         , 'GREEN' , 'Não Faturado'          )
+	oBrowseUp:AddLegend( 'SC6->( C6_QTDVEN > C6_QTDENT )'  , 'YELLOW', 'Parcialmente Faturado' )
+	oBrowseUp:AddLegend( 'SC6->( C6_QTDVEN == C6_QTDENT )' , 'RED'   , 'Totalmente Faturado'   )
+
+	oBrowseUp:DisableDetails()
+	oBrowseUp:ForceQuitButton()
+	oBrowseUp:SetMenuDef( 'mnuCockpitZZY' ) // Define de onde virao os botoes deste browse
+	oBrowseUp:SetProfileID( '1' ) // identificador (ID) para o Browse
+	oBrowseUp:Activate()
+
+	oBrowseDown := FWmBrowse():New()
+	oBrowseDown:SetOwner( oPanelDown )
+	oBrowseDown:SetDescription( "Oportunidades" )
+	oBrowseDown:SetAlias( 'ZZY' )
+	oBrowseDown:DisableReport()
+
+	oBrowseDown:AddLegend( 'ZZY->ZZY_PEDGER' , 'GREEN', 'Pedido Gerado'     )
+	oBrowseDown:AddLegend( '!ZZY->ZZY_PEDGER',   'RED', 'Pedido Não Gerado' )
+
+	oBrowseDown:DisableDetails()
+	oBrowseDown:SetMenuDef( '' ) // Referencia vazia para que nao exiba nenhum botão
+	oBrowseDown:SetProfileID( '2' )
+	oBrowseDown:Activate()
+
+	oBrwRelation:AddRelation( oBrowseUp, oBrowseDown, {;
+		{ 'C6_FILIAL'  , 'xFilial("ZZY" )' } ,;
+		{ 'C6_XOPORTU' , 'ZZY_CODIGO'      } ,;
+		{ 'C6_XITOPOR' , 'ZZY_ITEM'        } } )
+
+	oBrwRelation:Activate()
+
+	ACTIVATE MSDIALOG oDlgPrinc CENTERED
+
+return

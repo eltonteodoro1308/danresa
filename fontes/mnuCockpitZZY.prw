@@ -213,8 +213,8 @@ user function XINC410()
 			if ZZZ->( msSeek( cSeekZZX := xFilial( 'ZZZ' ) + allTrim( ZZY->ZZY_PRODUT ) ) .And.;
 					cSeekZZX == ZZZ_FILIAL + allTrim( ZZZ_CDNECT ) )
 
-				if SB1->( msSeek( cSeekSA1 := xFilial( 'SA1' ) + allTrim( ZZZ->ZZZ_CDPROT ) ) .And.;
-						cSeekSA1 == B1_FILIAL + B1_COD )
+				if SB1->( msSeek( cSeekSA1 := xFilial( 'SB1' ) + allTrim( ZZZ->ZZZ_CDPROT ) ) .And.;
+						cSeekSA1 == B1_FILIAL + alltrim( B1_COD ) )
 
 					aTail( aSc6 )['PRODUTO'          ] := SB1->B1_COD
 					aTail( aSc6 )['DESCRICAO_PRODUTO'] := SB1->B1_DESC
