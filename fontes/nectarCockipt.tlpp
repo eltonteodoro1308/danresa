@@ -79,6 +79,8 @@ static function validMark()
 
 		apMsgStop( 'A oportunidade já teve o pedido de venda gerado.', 'Atenção !!!' )
 
+		allUnMark( ZZY->ZZY_CODIGO, .F. )
+
 		return .F.
 
 	end if
@@ -87,13 +89,17 @@ static function validMark()
 
 		apMsgStop( 'O contato não foi compatibilizado.', 'Atenção !!!' )
 
+		allUnMark( ZZY->ZZY_CODIGO, .F. )
+
 		return .F.
 
 	end if
-	
+
 	if ! ZZY->ZZY_PRDCMP
 
 		apMsgStop( 'O produto não foi compatibilizado.', 'Atenção !!!' )
+
+		allUnMark( ZZY->ZZY_CODIGO, .F. )
 
 		return .F.
 
@@ -110,12 +116,44 @@ static function afterMark()
 
 	ZZY->( dbGotop() )
 
-	msSeek( cSeek )
+	ZZY->( msSeek( cSeek ) )
+
+	do while ZZY->( !EOF() .And. ZZY_FILIAL + ZZY_CODIGO == cSeek )
+
+		if validMark()
+
+			RecLock( 'ZZY', .F. )
+			ZZY->ZZY_OK := cMark
+			ZZY->( MsUnlock() )
+
+			ZZY->( dbSkip() )
+
+		else
+
+			exit
+
+		end if
+
+	end do
+
+	restArea( aArea )
+
+return
+
+static function allUnMark( cOportunidade, lMark )
+
+	Local aArea         := getArea()
+	Local cSeek         := xFilial( 'ZZY' ) + cOportunidade
+	Local cMark         := ZZY->ZZY_OK
+
+	ZZY->( dbGotop() )
+
+	ZZY->( msSeek( cSeek ) )
 
 	do while ZZY->( !EOF() .And. ZZY_FILIAL + ZZY_CODIGO == cSeek )
 
 		RecLock( 'ZZY', .F. )
-		ZZY->ZZY_OK := cMark
+		ZZY->( ZZY_OK := if( lMark, cMark, space( len( ZZY_OK ) ) ) )
 		ZZY->( MsUnlock() )
 
 		ZZY->( dbSkip() )

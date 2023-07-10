@@ -149,11 +149,11 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 
 						// Verifica se já há amarrração do produto Protheus com produto Nectar
 						dbSelectArea( 'ZZZ' )
-						SA1->( dbSetOrder( 2 ) )
+						ZZZ->( dbSetOrder( 2 ) )
 
 						cSeek := xFilial( 'ZZZ' ) + cValToChar( aOportunidades[ nX ]['produtos'][nY]['codigo'] )
 
-						oModel:loadValue( 'MASTER', 'ZZY_PRDCMP', ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ZZZ_CDNECT ) )
+						oModel:loadValue( 'MASTER', 'ZZY_PRDCMP', ZZZ->( msSeek( cSeek ) .And. cSeek == ZZZ_FILIAL + ALLTRIM( ZZZ_CDNECT ) ) )
 
 						oModel:loadValue( 'MASTER', 'ZZY_IDCLI', cValToChar( aOportunidades[ nX ]['cliente']['id'] ) )
 						oModel:loadValue( 'MASTER', 'ZZY_JSON', aOportunidades[ nX ]:toJson() )

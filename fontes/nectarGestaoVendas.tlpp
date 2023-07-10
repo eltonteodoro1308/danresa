@@ -38,7 +38,7 @@ user function nectarGestaoVendas()
 
 	oBrowseUp:DisableDetails()
 	oBrowseUp:ForceQuitButton()
-	oBrowseUp:SetMenuDef( 'mnuCockpitZZY' ) // Define de onde virao os botoes deste browse
+	oBrowseUp:SetMenuDef( 'mnuGestaoVendasSC6' ) // Define de onde virao os botoes deste browse
 	oBrowseUp:SetProfileID( '1' ) // identificador (ID) para o Browse
 	oBrowseUp:Activate()
 
@@ -46,6 +46,7 @@ user function nectarGestaoVendas()
 	oBrowseDown:SetOwner( oPanelDown )
 	oBrowseDown:SetDescription( "Oportunidades" )
 	oBrowseDown:SetAlias( 'ZZY' )
+	oBrowseDown:SetFilterDefault( "cValToChar(ZZY->ZZY_PEDGER)=='.T.'" )
 	oBrowseDown:DisableReport()
 
 	oBrowseDown:AddLegend( 'ZZY->ZZY_PEDGER' , 'GREEN', 'Pedido Gerado'     )
@@ -57,9 +58,9 @@ user function nectarGestaoVendas()
 	oBrowseDown:Activate()
 
 	oBrwRelation:AddRelation( oBrowseUp, oBrowseDown, {;
-		{ 'C6_FILIAL'  , 'xFilial("ZZY" )' } ,;
-		{ 'C6_XOPORTU' , 'ZZY_CODIGO'      } ,;
-		{ 'C6_XITOPOR' , 'ZZY_ITEM'        } } )
+		{ 'ZZY_FILIAL' , 'xFilial("SC6" )' } ,;
+		{ 'ZZY_CODIGO' , 'C6_XOPORTU'      } ,;
+		{ 'ZZY_ITEM'   , 'C6_XITOPOR'      } })
 
 	oBrwRelation:Activate()
 
