@@ -98,7 +98,7 @@ static function gravaOportunidades( cHeaderRet, uResponse, uJsonXml, cHttpCode, 
 
 				for nY := 1 to len( aOportunidades[ nX ]['produtos'] )
 
-					jOportunidadeCamposPersonalizados:fromJson( upper( aOportunidades[ nX ]['camposPersonalizados']:toJson() ) ) 
+					jOportunidadeCamposPersonalizados:fromJson( upper( aOportunidades[ nX ]['camposPersonalizados']:toJson() ) )
 
 					oModel := FWLoadModel( 'MODELZZY' )
 					oModel:SetOperation( MODEL_OPERATION_INSERT )
@@ -291,7 +291,7 @@ static function gravaContato( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 
 		jContato:fromJson( DecodeUtf8( uResponse ) )
 
-		jContatoCamposPersonalizados:fromJson( upper( jContato['camposPersonalizados']:toJson() ) ) 
+		jContatoCamposPersonalizados:fromJson( upper( jContato['camposPersonalizados']:toJson() ) )
 
 		cId := cValToChar( jContato['id'] )
 
@@ -322,7 +322,7 @@ static function gravaContato( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 				oModel:loadValue( 'MASTER', 'ZZX_EMAILS', jContato['emails'][1] )
 				oModel:loadValue( 'MASTER', 'ZZX_EMPRES', jContato['empresa'] )
 				oModel:loadValue( 'MASTER', 'ZZX_EMPATU', '' )
-				oModel:loadValue( 'MASTER', 'ZZX_ENDERE', jContato['enderecos'][1]:toJson() )
+				oModel:loadValue( 'MASTER', 'ZZX_ENDERE', if(len(jContato['enderecos'])>0,jContato['enderecos'][1]:toJson(),'') )
 				oModel:loadValue( 'MASTER', 'ZZX_FACEBO', '' )
 				oModel:loadValue( 'MASTER', 'ZZX_ID'    , cValToChar( jContato['id'] ) )
 				oModel:loadValue( 'MASTER', 'ZZX_INDPOR', '' )
@@ -344,9 +344,21 @@ static function gravaContato( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 				oModel:loadValue( 'MASTER', 'ZZX_COMPRO', jContato['compromissos'] )
 				oModel:loadValue( 'MASTER', 'ZZX_OPORTU', jContato['oportunidades'] )
 				oModel:loadValue( 'MASTER', 'ZZX_TAREFA', jContato['tarefas'] )
-				oModel:loadValue( 'MASTER', 'ZZX_RGPAIS', jContato['regiaoPais']['nome'] )
-				oModel:loadValue( 'MASTER', 'ZZX_RGESTD', jContato['regiaoEstado']['sigla'] )
-				oModel:loadValue( 'MASTER', 'ZZX_RGMUNC', jContato['regiaoMunicipio']['nome'] )
+				oModel:loadValue( 'MASTER', 'ZZX_RGPAIS', if( jContato:hasProperty('regiaoPais').and.;
+					valtype(jContato['regiaoPais'])!='U'.and.;
+					jContato['regiaoPais']:hasProperty('nome').and.;
+					valtype(jContato['regiaoPais']['nome'] )!='U',;
+					jContato['regiaoPais']['nome'],'' ) )
+				oModel:loadValue( 'MASTER', 'ZZX_RGESTD', if( jContato:hasProperty('regiaoEstado').and.;
+					valtype(jContato['regiaoEstado'])!='U'.and.;
+					jContato['regiaoEstado']:hasProperty('sigla').and.;
+					valtype(jContato['regiaoEstado']['sigla'] )!='U',;
+					jContato['regiaoEstado']['sigla'],'' ) )
+				oModel:loadValue( 'MASTER', 'ZZX_RGMUNC', if( jContato:hasProperty('regiaoMunicipio').and.;
+					valtype(jContato['regiaoMunicipio'])!='U'.and.;
+					jContato['regiaoMunicipio']:hasProperty('nome').and.;
+					valtype(jContato['regiaoMunicipio']['nome'] )!='U',;
+					jContato['regiaoMunicipio']['nome'],'' ) )
 				oModel:loadValue( 'MASTER', 'ZZX_JSON'  , jContato:toJson() )
 
 				If lRet := oModel:VldData()
@@ -458,7 +470,7 @@ static function gravaProduto( cHeaderRet, uResponse, uJsonXml, cHttpCode, cConte
 
 		jProduto:fromJson( DecodeUtf8( uResponse ) )
 
-		jProdutoCamposPersonalizados:fromJson( upper( jProduto['camposPersonalizados']:toJson() ) ) 
+		jProdutoCamposPersonalizados:fromJson( upper( jProduto['camposPersonalizados']:toJson() ) )
 
 		cId := cValToChar( jProduto['id'] )
 
